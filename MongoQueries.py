@@ -6,9 +6,10 @@ from bson import Code
 import math
 
 from Query import Query
-from Global import data, mongo_db, MONGO_FILENAME, MONGO_EXTRA_FILENAME, DATA_SIZE, MONGO_PICKLE_FILENAME
-import nobench_gendata
+from Settings import MONGO_FILENAME, MONGO_EXTRA_FILENAME, DATA_SIZE, MONGO_PICKLE_FILENAME
+from Global import data, mongo_db
 
+import nobench_gendata
 
 
 __author__ = 'Gary'

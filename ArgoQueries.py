@@ -6,13 +6,11 @@ from Query import Query
 import pickle
 import json2bulksql
 import nobench_gendata
-from Global import DATA_SIZE, psql_db
-
-
 
 __author__ = 'Gary'
 
-from Global import argo_db, ARGO_FILENAME, ARGO_EXTRA_FILENAME, ARGO_PICKLE_FILENAME
+from Global import argo_db, psql_db
+from Settings import DATA_SIZE, ARGO_FILENAME, ARGO_EXTRA_FILENAME, ARGO_PICKLE_FILENAME
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)

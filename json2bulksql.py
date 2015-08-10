@@ -3,7 +3,7 @@
 import sys
 import string
 import optparse
-from Global import DATA_SIZE
+from Settings import DATA_SIZE
 
 sys.path.append("third_party")
 import ijson
@@ -124,11 +124,19 @@ def convertFile(input_filename, start_objid=0, show_pbar=False, single_table=Fal
 
 
 def main(filename="nobench_data.json"):
-    cli_parser = optparse.OptionParser(usage="usage: %prog [options] input.json")
-    cli_parser.add_option("-n", "--start-objid", action="store", type="int", dest="start_objid", default=0,
-                          metavar="NUMBER", help="start numbering object IDs from NUMBER")
-    cli_parser.add_option("-s", "--single-table", action="store_true", dest="single_table", default=False,
-                          help="Output a single file for the single 5-column table format")
+    cli_parser = optparse.OptionParser(
+            usage="usage: %prog [options] input.json")
+    cli_parser.add_option(
+        "-n", "--start-objid",
+        action="store", type="int", dest="start_objid",
+        default=0, metavar="NUMBER",
+        help="start numbering object IDs from NUMBER",
+    )
+    cli_parser.add_option(
+        "-s", "--single-table",
+        action="store_true", dest="single_table", default=False,
+        help="Output a single file for the single 5-column table format",
+    )
 
     (options, args) = cli_parser.parse_args()
     #TODO THIS IS MY MOD

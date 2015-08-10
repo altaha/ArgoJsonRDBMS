@@ -19,7 +19,13 @@ import optparse
 import random
 import sys
 import string
-from Global import DEEPLY_NESTED, FAT_OBJECTS
+from Settings import (
+    DATA_SIZE,
+    DEEPLY_NESTED,
+    FAT_OBJECTS,
+    GENERIC_FILENAME,
+    GENERIC_EXTRA_FILENAME,
+)
 
 sys.path.append("third_party")
 
@@ -269,7 +275,7 @@ def main():
         action="store",
         type="int",
         dest="num_objs",
-        default=10000,
+        default=DATA_SIZE,
         metavar="NUMBER",
         help="how many JSON objects to generate")
     cli_parser.add_option(
@@ -343,7 +349,7 @@ def main():
     return rec_strs
 
 
-def main_non_cli(num_objs=0, mongo=False, outfile="generic_nobench_data",):
+def main_non_cli(num_objs=0, mongo=False, outfile=GENERIC_FILENAME,):
     if num_objs < 1:
         print
         "Must generate at least 1 object"
@@ -391,4 +397,5 @@ def main_non_cli(num_objs=0, mongo=False, outfile="generic_nobench_data",):
 
 
 if __name__ == "__main__":
-    main_non_cli(1000000)
+    main_non_cli(DATA_SIZE)
+    #main()

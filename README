@@ -1,9 +1,9 @@
-The repository for the Argo Vs MongoDB revisit. 
+The repository for the Argo Vs MongoDB revisit.
 
 The files that I've written on my own or modified are the following:
 1) nobench_gen_data.py
 * Modified data generation method to include deeply nested objects and larger objects.
-2) mongodriver.py, query.py, mongoqueries.py, argoqueries.py 
+2) mongodriver.py, query.py, mongoqueries.py, argoqueries.py
 * This is the overall testing suite that includes the queries for both systems, as well as the timing and data-loading mechanism.
 3) json2bulksql.py
 * This file has been modified in order to allow large JSON documents to be converted into the appropriate text files for DBMS-loading.
