@@ -5,6 +5,9 @@ def _add_extra_to_name(file_name):
     file_name[0] += '_extra'
     return '.'.join(file_name)
 
+ARGO_FILE_DIR = '/vagrant/ArgoJsonRDBMS/'
+MONGO_FILE_DIR = '/vagrant/ArgoJsonRDBMS/'
+
 ARGO_FILENAME = 'nobench_data_argo.json'
 GENERIC_FILENAME = 'nobench_data.json'
 MONGO_FILENAME = 'nobench_data_mongo.json'
@@ -17,7 +20,7 @@ PSQL_USER = 'vagrant'
 MONGO_USER = 'vagrant'
 
 RESULTS_FILENAME = 'results.csv'
-DATA_SIZE = 100
+DATA_SIZE = 1000
 ARGO_PICKLE_FILENAME = 'rec_strings_argo'
 MONGO_PICKLE_FILENAME = 'rec_strings_mongo'
 DEEPLY_NESTED = True

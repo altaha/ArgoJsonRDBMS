@@ -6,7 +6,13 @@ from bson import Code
 import math
 
 from Query import Query
-from Settings import MONGO_FILENAME, MONGO_EXTRA_FILENAME, DATA_SIZE, MONGO_PICKLE_FILENAME
+from Settings import (
+    DATA_SIZE,
+    MONGO_FILE_DIR,
+    MONGO_FILENAME,
+    MONGO_EXTRA_FILENAME,
+    MONGO_PICKLE_FILENAME,
+)
 from Global import data, mongo_db
 
 import nobench_gendata
@@ -42,6 +48,7 @@ class DropCollectionMongo(Query):
     def db_command(self):
         mongo_db.drop_collection('sampledata')
 
+
 class Query1Mongo(Query):
 
 
@@ -52,7 +59,6 @@ class Query1Mongo(Query):
         return data.find({}, ["str1", "num"])
 
 
-
 class Query2Mongo(Query):
 
 
@@ -61,8 +67,6 @@ class Query2Mongo(Query):
 
     def db_command(self):
         return data.find({}, ["nested_obj.str", "nested_obj.num"])
-
-
 
 
 class Query3Mongo(Query):
@@ -77,7 +81,6 @@ class Query3Mongo(Query):
             ["sparse_110", "sparse_919"])
 
 
-
 class Query4Mongo(Query):
     def __init__(self):
         super(Query4Mongo, self).__init__("Projection Query 4")
@@ -87,7 +90,6 @@ class Query4Mongo(Query):
             {"$or": [{"sparse_110": {"$exists": True}},
                         {"sparse_229": {"$exists": True}}]},
             ["sparse_110", "sparse_919"])
-
 
 
 class Query5Mongo(Query):
@@ -171,7 +173,6 @@ class Query9Mongo(Query):
         return data.find({"sparse_500": self.arguments[0]})
 
 
-
 class Query10Mongo(Query):
     def __init__(self):
         super(Query10Mongo, self).__init__("Aggregation Query 10")
@@ -225,7 +226,8 @@ class Query12Mongo(Query):
 
     def db_command(self):
         #make a subprocess call to mongoimport
-        load_data = subprocess.Popen(["mongoimport.exe", "--db", "argocompdb", "--collection", "sampledata", "--file", "D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_mongo_extra"], stdout=subprocess.PIPE)
+        extra_file_name = MONGO_FILE_DIR + MONGO_EXTRA_FILENAME
+        load_data = subprocess.Popen(["mongoimport", "--db", "argocompdb", "--collection", "sampledata", "--file", extra_file_name], stdout=subprocess.PIPE)
         load_data.communicate()
 
 
@@ -243,6 +245,7 @@ class Query13Mongo(Query):
     def db_command(self):
         return data.find({"multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single": self.arguments[0]})
 
+
 class Query14Mongo(Query):
     def __init__(self):
         super(Query14Mongo, self).__init__("Deep aggregation Query 14")
@@ -257,11 +260,13 @@ class Query14Mongo(Query):
     def db_command(self):
         return data.find({"multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg": self.arguments[0]})
 
+
 class InitialLoadMongo(Query):
     def __init__(self):
         super(InitialLoadMongo, self).__init__("Initial Data Load")
 
     def db_command(self):
         #make a subprocess call to mongoimport
-        load_data = subprocess.Popen(["mongoimport.exe", "--db", "argocompdb", "--collection", "sampledata", "--file", "D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_mongo"], stdout=subprocess.PIPE)
+        file_name = MONGO_FILE_DIR + MONGO_FILENAME
+        load_data = subprocess.Popen(["mongoimport", "--db", "argocompdb", "--collection", "sampledata", "--file", file_name], stdout=subprocess.PIPE)
         load_data.communicate()

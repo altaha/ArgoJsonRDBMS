@@ -112,9 +112,9 @@ if __name__ == "__main__":
     for i in range(10):
         if generate_new_data:
             log.info("Generate new Data flag was true. Attempting to remove JSON docs.")
-            #remove_json_docs()
+            remove_json_docs()
             log.info("Generating new data of size: {}.".format(DATA_SIZE))
-            #ArgoQueries.generate_data_argo(DATA_SIZE)
+            ArgoQueries.generate_data_argo(DATA_SIZE)
             log.info("Cleaning out PostgreSQL.")
             argo_test_suite.clean()
             log.info("Loading new data into PostgreSQL.")
