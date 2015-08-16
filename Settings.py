@@ -20,8 +20,10 @@ PSQL_USER = 'vagrant'
 MONGO_USER = 'vagrant'
 
 RESULTS_FILENAME = 'results.csv'
-DATA_SIZE = 1000
 ARGO_PICKLE_FILENAME = 'rec_strings_argo'
 MONGO_PICKLE_FILENAME = 'rec_strings_mongo'
+
+DATA_SIZE = 100000
+NUM_BENCH_ITERATIONS = 10
 DEEPLY_NESTED = True
 FAT_OBJECTS = True

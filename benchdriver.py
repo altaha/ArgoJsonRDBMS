@@ -1,7 +1,7 @@
 import os
 import csv
 import logging
-from Settings import RESULTS_FILENAME, DATA_SIZE
+from Settings import RESULTS_FILENAME, DATA_SIZE, NUM_BENCH_ITERATIONS
 import ArgoQueries
 import MongoQueries
 
@@ -101,47 +101,59 @@ if __name__ == "__main__":
     split_filename = RESULTS_FILENAME.split(".")
     outfile_mongo = OutFileHandler(split_filename[0] + "_" + str(DATA_SIZE) + "_Mongo" + "." + split_filename[1])
 
+    outfile_mongo.write_headers()
+
     outfile_argo = OutFileHandler(split_filename[0] + "_" + str(DATA_SIZE) + "_Argo" + "." + split_filename[1])
-    #outfile.write_headers()
+    outfile_argo.write_headers()
 
     #################################
     #Actual testing area begins here.
     #################################
-    generate_new_data = True
+    generate_new_data = False
+    load_new_data = True
     log.info("Beginning Argo Benchmark.")
-    for i in range(10):
+    for i in range(NUM_BENCH_ITERATIONS):
         if generate_new_data:
-            log.info("Generate new Data flag was true. Attempting to remove JSON docs.")
+            log.info("Argo Generate new Data flag was true. Attempting to remove JSON docs.")
             remove_json_docs()
             log.info("Generating new data of size: {}.".format(DATA_SIZE))
             ArgoQueries.generate_data_argo(DATA_SIZE)
+        if load_new_data:
             log.info("Cleaning out PostgreSQL.")
             argo_test_suite.clean()
             log.info("Loading new data into PostgreSQL.")
             load_time = argo_test_suite.load_data()
         else:
-            log.info("Generate new Data flag was false")
             load_time = 0
+        log.info("Argo Benchmark iteration {0}".format(i))
         results = argo_test_suite.begin_testing()
         results.append(load_time)
         outfile_argo.write_row(results)
         log.info("Argo testing suite complete. ")
+        generate_new_data = False
+        load_new_data = False
 
-        log.info("Beginning Mongo Benchmark. ")
+
+    generate_new_data = False
+    load_new_data = True
+    log.info("Beginning Mongo Benchmark.")
+    for i in range(NUM_BENCH_ITERATIONS):
         if generate_new_data:
-            log.info("Generate new Data flag was true. Attempting to remove JSON docs.")
+            log.info("Mongo Generate new Data flag was true. Attempting to remove JSON docs.")
+            remove_json_docs()
             log.info("Generating new data of size: {}.".format(DATA_SIZE))
             MongoQueries.generate_data_mongo(DATA_SIZE)
+        if load_new_data:
             log.info("Cleaning out MongoDB.")
             mongo_test_suite.clean()
             log.info("Loading new data into MongoDB.")
             load_time = mongo_test_suite.load_data()
         else:
             load_time = 0
-
+        log.info("Mongo Benchmark iteration {0}".format(i))
         results = mongo_test_suite.begin_testing()
         results.append(load_time)
         outfile_mongo.write_row(results)
         log.info("Mongo Testing Complete")
         generate_new_data = False
-
+        load_new_data = False
