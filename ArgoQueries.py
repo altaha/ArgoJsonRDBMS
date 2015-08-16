@@ -10,7 +10,13 @@ import nobench_gendata
 __author__ = 'Gary'
 
 from Global import argo_db, psql_db
-from Settings import DATA_SIZE, ARGO_FILENAME, ARGO_EXTRA_FILENAME, ARGO_PICKLE_FILENAME
+from Settings import (
+    ARGO_FILENAME,
+    ARGO_EXTRA_FILENAME,
+    ARGO_PICKLE_FILENAME,
+    PSQL_USER,
+    DATA_SIZE,
+)
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -185,13 +191,13 @@ class Query12Argo(Query):
     def db_command(self):
 
         PrepFilesArgo(ARGO_EXTRA_FILENAME).execute()
-        load_bool = subprocess.Popen(["psql", "-w", "-U", "tadgh", "-d", "argo", "-c",
+        load_bool = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c",
                                       "COPY argo_nobench_main_bool(objid, keystr, valbool) FROM 'D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_argo_extra_bool.txt' WITH DELIMITER '|';"],
                                      stdout=subprocess.PIPE)
-        load_num = subprocess.Popen(["psql", "-w", "-U", "tadgh", "-d", "argo", "-c",
+        load_num = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c",
                                      "COPY argo_nobench_main_num(objid, keystr, valnum) FROM 'D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_argo_extra_num.txt' WITH DELIMITER '|';"],
                                     stdout=subprocess.PIPE)
-        load_str = subprocess.Popen(["psql", "-w", "-U", "tadgh", "-d", "argo", "-c",
+        load_str = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c",
                                      "COPY argo_nobench_main_str(objid, keystr, valstr) FROM 'D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_argo_extra_str.txt' WITH DELIMITER '|';"],
                                     stdout=subprocess.PIPE)
 
@@ -251,13 +257,13 @@ class InitialLoadArgo(Query):
         print "Starting..."
         PrepFilesArgo(ARGO_FILENAME).execute()
 
-        load_bool = subprocess.Popen(["psql", "-w", "-U", "tadgh", "-d", "argo", "-c",
+        load_bool = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c",
                                       "COPY argo_nobench_main_bool(objid, keystr, valbool) FROM 'D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_argo_bool.txt' WITH DELIMITER '|';"],
                                      stdout=subprocess.PIPE)
-        load_num = subprocess.Popen(["psql", "-w", "-U", "tadgh", "-d", "argo", "-c",
+        load_num = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c",
                                      "COPY argo_nobench_main_num(objid, keystr, valnum) FROM 'D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_argo_num.txt' WITH DELIMITER '|';"],
                                     stdout=subprocess.PIPE)
-        load_str = subprocess.Popen(["psql", "-w", "-U", "tadgh", "-d", "argo", "-c",
+        load_str = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c",
                                      "COPY argo_nobench_main_str(objid, keystr, valstr) FROM 'D:\\Dropbox\\Argo Vs Mongo Project\\nobench\\nobench_data_argo_str.txt' WITH DELIMITER '|';"],
                                     stdout=subprocess.PIPE)
 

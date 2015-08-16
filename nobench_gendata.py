@@ -397,5 +397,5 @@ def main_non_cli(num_objs=0, mongo=False, outfile=GENERIC_FILENAME,):
 
 
 if __name__ == "__main__":
-    main_non_cli(DATA_SIZE)
+    main_non_cli(num_objs=DATA_SIZE)
     #main()

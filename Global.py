@@ -3,6 +3,8 @@ from argo import demo_init
 import psycopg2
 __author__ = 'Gary'
 
+from Settings import PSQL_USER
+
 #INIT MONGO Connection
 mongo_client = MongoClient()
 print "connected to mongo"
@@ -15,4 +17,6 @@ argo_db = demo_init.get_db()
 print "connected to argo..."
 
 #INIT PSQL Direct Connection
-psql_db = psycopg2.connect("dbname=argo user=tadgh password=coin0nioc")
+psql_db = psycopg2.connect(
+    'dbname=argo user={0} password=coin0nioc'.format(PSQL_USER)
+)

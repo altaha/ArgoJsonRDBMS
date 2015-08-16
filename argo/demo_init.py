@@ -21,11 +21,13 @@ import psycopg2
 import dbms_postgres
 import argodb
 
+from Settings import PSQL_USER
+
 # Set to false to use Argo/3, true to use Argo/1.
 USE_ARGO_1 = False
 
 def get_db():
     # Edit the line below with your own configuration options.
-    conn = psycopg2.connect("dbname=argo user=tadgh password=coin0nioc")
+    conn = psycopg2.connect("dbname=argo user={0} password=coin0nioc".format(PSQL_USER))
     dbms = dbms_postgres.PostgresDBMS(conn)
     return argodb.ArgoDB(dbms, USE_ARGO_1)
