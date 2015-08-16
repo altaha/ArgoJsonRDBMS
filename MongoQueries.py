@@ -21,7 +21,7 @@ try:
     with open(MONGO_PICKLE_FILENAME, "rb") as infile:
         recommended_strings = pickle.load(infile)
 except Exception as e:
-    log.error("Couldn't find pickle file!!", str(e))
+    log.error("Couldn't find pickle file!! (exception: {0})".format(str(e)))
     recommended_strings = []
 
 
