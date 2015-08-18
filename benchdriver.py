@@ -4,6 +4,7 @@ import logging
 from Settings import RESULTS_FILENAME, DATA_SIZE, NUM_BENCH_ITERATIONS
 import ArgoQueries
 import MongoQueries
+import PJsonQueries
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -89,71 +90,117 @@ if __name__ == "__main__":
     q12m = MongoQueries.Query12Mongo()
     q13m = MongoQueries.Query13Mongo()
     q14m = MongoQueries.Query14Mongo()
-
-
     mongo_queries = [q1m, q2m, q3m, q4m, q5m, q6m, q7m, q8m, q9m, q10m, q12m]#, q13m, q14m]
     mongo_dropper = MongoQueries.DropCollectionMongo()
     mongo_loader = MongoQueries.InitialLoadMongo()
     mongo_test_suite = TestSuite(DATA_SIZE, mongo_dropper, mongo_loader, mongo_queries, "Mongo")
 
+    q1p = PJsonQueries.Query1PJson()
+    q2p = PJsonQueries.Query2PJson()
+    q3p = PJsonQueries.Query3PJson()
+    q4p = PJsonQueries.Query4PJson()
+    q5p = PJsonQueries.Query5PJson()
+    q6p = PJsonQueries.Query6PJson()
+    q7p = PJsonQueries.Query7PJson()
+    q8p = PJsonQueries.Query8PJson()
+    q9p = PJsonQueries.Query9PJson()
+    q10p = PJsonQueries.Query10PJson()
+    q12p = PJsonQueries.Query12PJson()
+    q13p = PJsonQueries.Query13PJson()
+    q14p = PJsonQueries.Query14PJson()
+    pjson_queries = [q1p, q2p, q3p, q4p, q5p, q6p, q7p, q8p, q9p, q10p, q12p]#, q13p, q14p]
+    pjson_dropper = PJsonQueries.DropCollectionPJson()
+    pjson_loader = PJsonQueries.InitialLoadPJson()
+    pjson_test_suite = TestSuite(DATA_SIZE, pjson_dropper, pjson_loader, pjson_queries, "PostgresJSONB")
 
     #preparing our CSV handler
     split_filename = RESULTS_FILENAME.split(".")
-    outfile_mongo = OutFileHandler(split_filename[0] + "_" + str(DATA_SIZE) + "_Mongo" + "." + split_filename[1])
-
-    outfile_mongo.write_headers()
-
     outfile_argo = OutFileHandler(split_filename[0] + "_" + str(DATA_SIZE) + "_Argo" + "." + split_filename[1])
     outfile_argo.write_headers()
+
+    outfile_mongo = OutFileHandler(split_filename[0] + "_" + str(DATA_SIZE) + "_Mongo" + "." + split_filename[1])
+    outfile_mongo.write_headers()
+
+    outfile_pjson = OutFileHandler(split_filename[0] + "_" + str(DATA_SIZE) + "_PJson" + "." + split_filename[1])
+    outfile_pjson.write_headers()
+
+
+    run_argo_bench = False
+    run_mongo_bench = False
+    run_pjson_bench = True
 
     #################################
     #Actual testing area begins here.
     #################################
-    generate_new_data = False
-    load_new_data = True
-    log.info("Beginning Argo Benchmark.")
-    for i in range(NUM_BENCH_ITERATIONS):
-        if generate_new_data:
-            log.info("Argo Generate new Data flag was true. Attempting to remove JSON docs.")
-            remove_json_docs()
-            log.info("Generating new data of size: {}.".format(DATA_SIZE))
-            ArgoQueries.generate_data_argo(DATA_SIZE)
-        if load_new_data:
-            log.info("Cleaning out PostgreSQL.")
-            argo_test_suite.clean()
-            log.info("Loading new data into PostgreSQL.")
-            load_time = argo_test_suite.load_data()
-        else:
-            load_time = 0
-        log.info("Argo Benchmark iteration {0}".format(i))
-        results = argo_test_suite.begin_testing()
-        results.append(load_time)
-        outfile_argo.write_row(results)
-        log.info("Argo testing suite complete. ")
-        generate_new_data = False
-        load_new_data = False
+    if run_argo_bench:
+        generate_new_data = True
+        load_new_data = True
+        log.info("Beginning Argo Benchmark.")
+        for i in range(NUM_BENCH_ITERATIONS):
+            if generate_new_data:
+                log.info("Argo Generate new Data flag was true. Attempting to remove JSON docs.")
+                remove_json_docs()
+                log.info("Generating new data of size: {}.".format(DATA_SIZE))
+                ArgoQueries.generate_data_argo(DATA_SIZE)
+            if load_new_data:
+                log.info("Cleaning out PostgreSQL.")
+                argo_test_suite.clean()
+                log.info("Loading new data into PostgreSQL.")
+                load_time = argo_test_suite.load_data()
+            else:
+                load_time = 0
+            log.info("Argo Benchmark iteration {0}".format(i))
+            results = argo_test_suite.begin_testing()
+            results.append(load_time)
+            outfile_argo.write_row(results)
+            log.info("Argo testing suite complete. ")
+            generate_new_data = False
+            load_new_data = False
 
 
-    generate_new_data = False
-    load_new_data = True
-    log.info("Beginning Mongo Benchmark.")
-    for i in range(NUM_BENCH_ITERATIONS):
-        if generate_new_data:
-            log.info("Mongo Generate new Data flag was true. Attempting to remove JSON docs.")
-            remove_json_docs()
-            log.info("Generating new data of size: {}.".format(DATA_SIZE))
-            MongoQueries.generate_data_mongo(DATA_SIZE)
-        if load_new_data:
-            log.info("Cleaning out MongoDB.")
-            mongo_test_suite.clean()
-            log.info("Loading new data into MongoDB.")
-            load_time = mongo_test_suite.load_data()
-        else:
-            load_time = 0
-        log.info("Mongo Benchmark iteration {0}".format(i))
-        results = mongo_test_suite.begin_testing()
-        results.append(load_time)
-        outfile_mongo.write_row(results)
-        log.info("Mongo Testing Complete")
+    if run_mongo_bench:
+        generate_new_data = True
+        load_new_data = True
+        log.info("Beginning Mongo Benchmark.")
+        for i in range(NUM_BENCH_ITERATIONS):
+            if generate_new_data:
+                log.info("Mongo Generate new Data flag was true.")
+                log.info("Generating new data of size: {}.".format(DATA_SIZE))
+                MongoQueries.generate_data_mongo(DATA_SIZE)
+            if load_new_data:
+                log.info("Cleaning out MongoDB.")
+                mongo_test_suite.clean()
+                log.info("Loading new data into MongoDB.")
+                load_time = mongo_test_suite.load_data()
+            else:
+                load_time = 0
+            log.info("Mongo Benchmark iteration {0}".format(i))
+            results = mongo_test_suite.begin_testing()
+            results.append(load_time)
+            outfile_mongo.write_row(results)
+            log.info("Mongo Testing Complete")
+            generate_new_data = False
+            load_new_data = False
+
+
+    if run_pjson_bench:
         generate_new_data = False
-        load_new_data = False
+        load_new_data = True
+        log.info("Beginning PJson Benchmark.")
+        for i in range(NUM_BENCH_ITERATIONS):
+            if generate_new_data:
+                log.info("PJSON Generate new Data flag was true. Using Mongo's data.")
+            if load_new_data:
+                log.info("Cleaning out PJson.")
+                pjson_test_suite.clean()
+                log.info("Loading new data into PJson.")
+                load_time = pjson_test_suite.load_data()
+            else:
+                load_time = 0
+            log.info("PJson Benchmark iteration {0}".format(i))
+            results = pjson_test_suite.begin_testing()
+            results.append(load_time)
+            outfile_pjson.write_row(results)
+            log.info("PJson Testing Complete")
+            generate_new_data = False
+            load_new_data = False
