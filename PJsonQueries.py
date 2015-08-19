@@ -53,8 +53,9 @@ class Query2PJson(Query):
         super(Query2PJson, self).__init__("Projection Query 2")
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql("SELECT nested_obj.str1, nested_obj.num FROM nobench_main;")
+        cur = pjson_db.cursor()
+        cur.execute("SELECT data #> '{nested_obj,str}' AS nested_str, data #> '{nested_obj,num}' AS nested_num FROM pjson_main;")
+        return cur
 
 
 class Query3PJson(Query):
@@ -62,8 +63,9 @@ class Query3PJson(Query):
         super(Query3PJson, self).__init__("Projection Query 3")
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql("SELECT sparse_110, sparse_119 FROM nobench_main;")
+        cur = pjson_db.cursor()
+        cur.execute("SELECT data -> 'sparse_110' AS sparse_110, data -> 'sparse_119' AS sparse_119 FROM pjson_main WHERE data ?& array['sparse_110', 'sparse_119'];")
+        return cur
 
 
 class Query4PJson(Query):
@@ -71,8 +73,9 @@ class Query4PJson(Query):
         super(Query4PJson, self).__init__("Projection Query 4")
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql("SELECT sparse_110, sparse_220 FROM nobench_main;")
+        cur = pjson_db.cursor()
+        cur.execute("SELECT data -> 'sparse_305' AS sparse_305, data -> 'sparse_991' AS sparse_991 FROM pjson_main WHERE data ?| array['sparse_305', 'sparse_991'];")
+        return cur
 
 
 class Query5PJson(Query):
@@ -80,18 +83,21 @@ class Query5PJson(Query):
         super(Query5PJson, self).__init__("Selection Query 5")
 
     def prepare(self):
-        return None
-        halfway_index = DATA_SIZE / 2
-        results = pjson_db.execute_sql("SELECT str1 FROM nobench_main")
-        for index, result in enumerate(results):
-
-            if index == halfway_index:
-                self.arguments.append(result['str1'])
+        cur = pjson_db.cursor()
+        cur.execute("SELECT data ->> 'str1' FROM pjson_main;")
+        halfway_index = cur.rowcount / 2
+        cur.scroll(halfway_index)
+        result = cur.fetchone()
+        self.arguments.append(result[0])
+        cur.close()
 
     def db_command(self):
         return None
-        return pjson_db.execute_sql(
-            'SELECT * FROM nobench_main WHERE str1 = "{}";'.format(self.arguments[0]))
+        cur = pjson_db.cursor()
+        cur.execute(
+            "SELECT * FROM pjson_main WHERE data @> '{\"str1\": {}}';".format(self.arguments[0])
+        )
+        return cur
 
 
 class Query6PJson(Query):

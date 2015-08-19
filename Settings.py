@@ -17,7 +17,7 @@ PJSON_FILENAME = 'nobench_data_mongo.json'
 ARGO_EXTRA_FILENAME = _add_extra_to_name(ARGO_FILENAME)
 GENERIC_EXTRA_FILENAME = _add_extra_to_name(GENERIC_FILENAME)
 MONGO_EXTRA_FILENAME = _add_extra_to_name(MONGO_FILENAME)
-PJSON_EXTRA_FILENAME = _add_extra_to_name(MONGO_FILENAME)
+PJSON_EXTRA_FILENAME = _add_extra_to_name(PJSON_FILENAME)
 
 PSQL_USER = 'vagrant'
 MONGO_USER = 'vagrant'
