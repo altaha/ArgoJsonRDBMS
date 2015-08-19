@@ -133,7 +133,7 @@ if __name__ == "__main__":
     #Actual testing area begins here.
     #################################
     if run_argo_bench:
-        generate_new_data = True
+        generate_new_data = False
         load_new_data = True
         log.info("Beginning Argo Benchmark.")
         for i in range(NUM_BENCH_ITERATIONS):

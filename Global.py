@@ -20,3 +20,7 @@ print "connected to argo..."
 psql_db = psycopg2.connect(
     'dbname=argo user={0} password=coin0nioc'.format(PSQL_USER)
 )
+
+pjson_db = psycopg2.connect(
+    'dbname=pjson user={0} password=coin0nioc'.format(PSQL_USER)
+)
