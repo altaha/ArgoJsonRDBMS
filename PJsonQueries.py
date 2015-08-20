@@ -127,9 +127,13 @@ class Query7PJson(Query):
         self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql("SELECT * FROM nobench_main WHERE dyn1 >= {} AND dyn1 <= {};".format(self.arguments[0],
-                                                                                                        self.arguments[1]))
+        cur = pjson_db.cursor()
+        cur.execute(
+            "SELECT * FROM pjson_main WHERE data->>'dyn1' >= '{}' AND data->>'dyn1' < '{}';".format(
+                self.arguments[0], self.arguments[1]
+            )
+        )
+        return cur
 
 
 class Query8PJson(Query):

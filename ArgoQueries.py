@@ -113,7 +113,7 @@ class Query7Argo(Query):
         self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
-        return argo_db.execute_sql("SELECT * FROM nobench_main WHERE dyn1 >= {} AND dyn1 <= {};".format(self.arguments[0],
+        return argo_db.execute_sql("SELECT * FROM nobench_main WHERE dyn1 >= {} AND dyn1 < {};".format(self.arguments[0],
                                                                                                         self.arguments[1]))
 
 
