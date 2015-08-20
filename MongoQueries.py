@@ -1,10 +1,11 @@
 import pickle
 import random
 import subprocess
-
-from bson import Code
 import math
+from bson import Code
 
+import nobench_gendata
+from bench_utils import get_random_data_slice
 from Query import Query
 from Settings import (
     DATA_SIZE,
@@ -14,8 +15,6 @@ from Settings import (
     MONGO_PICKLE_FILENAME,
 )
 from Global import data, mongo_db
-
-import nobench_gendata
 
 
 __author__ = 'Gary'
@@ -113,11 +112,8 @@ class Query6Mongo(Query):
         super(Query6Mongo, self).__init__("Selection Query 6")
 
     def prepare(self):
-        data_slice_size = math.ceil(DATA_SIZE * 0.001)
-        rand_num = random.randint(1, DATA_SIZE)
         #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
         #Select 0.1% of data. 1000 rows in this case.
@@ -129,11 +125,8 @@ class Query7Mongo(Query):
         super(Query7Mongo, self).__init__("Selection Query 7")
 
     def prepare(self):
-        data_slice_size = math.ceil(DATA_SIZE * 0.001)
-        rand_num = random.randint(1, DATA_SIZE)
         #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
         #Select 0.1% of data. 1000 rows in this case.
@@ -179,11 +172,8 @@ class Query10Mongo(Query):
 
     def prepare(self):
         #getting 10 percent of data
-        data_slice_size = math.ceil(DATA_SIZE * 0.1)
-        rand_num = random.randint(1, DATA_SIZE)
-        #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.1)
+
     def db_command(self):
 
         return data.group(

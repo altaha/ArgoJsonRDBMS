@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
 
     if run_mongo_bench:
-        generate_new_data = True
+        generate_new_data = False
         load_new_data = True
         log.info("Beginning Mongo Benchmark.")
         for i in range(NUM_BENCH_ITERATIONS):

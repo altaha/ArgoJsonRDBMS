@@ -2,13 +2,12 @@ import logging
 import random
 import subprocess
 import math
-from Query import Query
 import pickle
+
 import json2bulksql
 import nobench_gendata
-
-__author__ = 'Gary'
-
+from bench_utils import get_random_data_slice
+from Query import Query
 from Global import argo_db, psql_db
 from Settings import (
     ARGO_FILE_DIR,
@@ -18,6 +17,8 @@ from Settings import (
     DATA_SIZE,
     PSQL_USER,
 )
+
+__author__ = 'Gary'
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -94,15 +95,12 @@ class Query6Argo(Query):
         super(Query6Argo, self).__init__("Selection Query 6")
 
     def prepare(self):
-        data_slice_size = math.ceil(DATA_SIZE * 0.001)
-        rand_num = random.randint(1, DATA_SIZE)
         #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
         # return argo_db.execute_sql("SELECT * FROM nobench_main WHERE num BETWEEN 30000 AND 30100;")
-        return argo_db.execute_sql("SELECT * FROM nobench_main WHERE num >= {} AND num <= {};".format(self.arguments[0],
+        return argo_db.execute_sql("SELECT * FROM nobench_main WHERE num >= {} AND num < {};".format(self.arguments[0],
                                                                                                       self.arguments[1]))
 
 
@@ -111,11 +109,8 @@ class Query7Argo(Query):
         super(Query7Argo, self).__init__("Selection Query 7")
 
     def prepare(self):
-        data_slice_size = math.ceil(DATA_SIZE * 0.001)
-        rand_num = random.randint(1, DATA_SIZE)
         #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
         return argo_db.execute_sql("SELECT * FROM nobench_main WHERE dyn1 >= {} AND dyn1 <= {};".format(self.arguments[0],
@@ -160,12 +155,7 @@ class Query10Argo(Query):
 
     def prepare(self):
         #getting 10 percent of data
-        data_slice_size = math.ceil(DATA_SIZE * 0.1)
-        rand_num = random.randint(1, DATA_SIZE)
-        #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
-
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.1)
 
     def db_command(self):
         cur = psql_db.cursor()

@@ -2,11 +2,10 @@ import logging
 import random
 import subprocess
 import math
-from Query import Query
 import pickle
 
-__author__ = 'Ahmed'
-
+from bench_utils import get_random_data_slice
+from Query import Query
 from Global import pjson_db
 from Settings import (
     PJSON_FILE_DIR,
@@ -16,6 +15,8 @@ from Settings import (
     DATA_SIZE,
     PSQL_USER,
 )
+
+__author__ = 'Ahmed'
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -92,10 +93,9 @@ class Query5PJson(Query):
         cur.close()
 
     def db_command(self):
-        return None
         cur = pjson_db.cursor()
         cur.execute(
-            "SELECT * FROM pjson_main WHERE data @> '{\"str1\": {}}';".format(self.arguments[0])
+            "SELECT * FROM pjson_main WHERE data ->> 'str1' = '{}';".format(self.arguments[0])
         )
         return cur
 
@@ -105,18 +105,17 @@ class Query6PJson(Query):
         super(Query6PJson, self).__init__("Selection Query 6")
 
     def prepare(self):
-        return None
-        data_slice_size = math.ceil(DATA_SIZE * 0.001)
-        rand_num = random.randint(1, DATA_SIZE)
         #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
-        return None
-        # return pjson_db.execute_sql("SELECT * FROM nobench_main WHERE num BETWEEN 30000 AND 30100;")
-        return pjson_db.execute_sql("SELECT * FROM nobench_main WHERE num >= {} AND num <= {};".format(self.arguments[0],
-                                                                                                      self.arguments[1]))
+        cur = pjson_db.cursor()
+        cur.execute(
+            "SELECT * FROM pjson_main WHERE data->>'num' >= '{}' AND data->>'num' < '{}';".format(
+                self.arguments[0], self.arguments[1]
+            )
+        )
+        return cur
 
 
 class Query7PJson(Query):
@@ -124,12 +123,8 @@ class Query7PJson(Query):
         super(Query7PJson, self).__init__("Selection Query 7")
 
     def prepare(self):
-        return None
-        data_slice_size = math.ceil(DATA_SIZE * 0.001)
-        rand_num = random.randint(1, DATA_SIZE)
         #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
         return None
@@ -177,14 +172,8 @@ class Query10PJson(Query):
         super(Query10PJson, self).__init__("Aggregation Query 10")
 
     def prepare(self):
-        return None
         #getting 10 percent of data
-        data_slice_size = math.ceil(DATA_SIZE * 0.1)
-        rand_num = random.randint(1, DATA_SIZE)
-        #Changing the parameters of the query based on the trial size.
-        self.arguments.append(rand_num)
-        self.arguments.append(rand_num + data_slice_size)
-
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.1)
 
     def db_command(self):
         return None
