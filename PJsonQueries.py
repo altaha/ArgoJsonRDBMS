@@ -187,12 +187,17 @@ class Query10PJson(Query):
         self.arguments = get_random_data_slice(DATA_SIZE, 0.1)
 
     def db_command(self):
-        return None
+        jsonb_query = (
+            "SELECT COUNT(*) FROM pjson_main WHERE CAST(data->>'num' AS integer) >= {}"
+            " AND CAST(data->>'num' AS integer) < {}"
+            " GROUP BY data->>'thousandth';".format(
+                self.arguments[0], self.arguments[1]
+            )
+        )
         cur = pjson_db.cursor()
-        cur.execute("""DROP TABLE IF EXISTS intermediate;
-                       CREATE TEMP TABLE intermediate AS SELECT objid FROM argo_nobench_main_num WHERE keystr = 'num' and valnum BETWEEN %s AND %s;
-                       SELECT count(*) FROM argo_nobench_main_num WHERE objid in (SELECT objid FROM intermediate) AND keystr = 'thousandth' GROUP BY valnum""", (self.arguments[0], self.arguments[1]))
+        cur.execute(jsonb_query)
         return cur
+        #query = "SELECT COUNT(*) from pjson_main WHERE CAST(data->>'num' AS integer) >= 100 AND CAST(data->>'num' AS integer) < 400 GROUP BY data->>'thousandth';"
 
 
 class Query11PJson(Query):
