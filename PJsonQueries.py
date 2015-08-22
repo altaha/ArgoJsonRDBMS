@@ -1,8 +1,9 @@
+import json
 import logging
-import random
-import subprocess
 import math
 import pickle
+import random
+import subprocess
 
 from bench_utils import get_random_data_slice
 from Query import Query
@@ -111,7 +112,8 @@ class Query6PJson(Query):
     def db_command(self):
         cur = pjson_db.cursor()
         cur.execute(
-            "SELECT * FROM pjson_main WHERE data->>'num' >= '{}' AND data->>'num' < '{}';".format(
+            "SELECT * FROM pjson_main WHERE CAST(data->>'num' AS integer) >= {}"
+            " AND CAST(data->>'num' AS integer) < {};".format(
                 self.arguments[0], self.arguments[1]
             )
         )
@@ -141,34 +143,39 @@ class Query8PJson(Query):
         super(Query8PJson, self).__init__("Selection Query 8")
 
     def prepare(self):
-        return None
         global recommended_strings
         random.seed()
         random.shuffle(recommended_strings)
         self.arguments.append(recommended_strings[0])
 
     def db_command(self):
-        return None
+        search_term = self.arguments[0]
+        jsonb_query = "SELECT * from pjson_main WHERE data @> '{0}';".format(
+            json.dumps({'nested_arr': [search_term]})
+        )
         cur = pjson_db.cursor()
-        cur.execute("""SELECT objid FROM argo_nobench_main_str WHERE keystr SIMILAR TO 'nested_arr:[\d]+' AND valstr = %s""", (self.arguments[0],))
+        cur.execute(jsonb_query)
         return cur
+        #jsonb = "SELECT * from pjson_main WHERE data @> '{"nested_arr": ["interested"]}';"
 
 class Query9PJson(Query):
     def __init__(self):
         super(Query9PJson, self).__init__("Selection Query 9")
 
     def prepare(self):
-        return None
-        results = pjson_db.execute_sql("SELECT sparse_500 FROM nobench_main")
-        for index, result in enumerate(results):
-
+        cur = pjson_db.cursor()
+        cur.execute("SELECT data->>'sparse_500' from pjson_main WHERE data ? 'sparse_500';")
+        for index, result in enumerate(cur):
             if index == 5:
-                self.arguments.append(result['sparse_500'])
+                self.arguments.append(result[0])
 
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql('SELECT * FROM nobench_main WHERE sparse_500 = "{}";'.format(self.arguments[0]))
+        jsonb_query = "SELECT * FROM pjson_main WHERE data ->> 'sparse_500' = '{0}';".format(
+            self.arguments[0])
+        cur = pjson_db.cursor()
+        cur.execute(jsonb_query)
+        return cur
 
 
 class Query10PJson(Query):
