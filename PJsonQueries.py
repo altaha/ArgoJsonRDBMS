@@ -106,7 +106,7 @@ class Query6PJson(Query):
         super(Query6PJson, self).__init__("Selection Query 6")
 
     def prepare(self):
-        #Changing the parameters of the query based on the trial size.
+        #getting 0.1 percent of data
         self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
@@ -125,7 +125,7 @@ class Query7PJson(Query):
         super(Query7PJson, self).__init__("Selection Query 7")
 
     def prepare(self):
-        #Changing the parameters of the query based on the trial size.
+        #getting 0.1 percent of data
         self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
 
     def db_command(self):
@@ -197,18 +197,28 @@ class Query10PJson(Query):
         cur = pjson_db.cursor()
         cur.execute(jsonb_query)
         return cur
-        #query = "SELECT COUNT(*) from pjson_main WHERE CAST(data->>'num' AS integer) >= 100 AND CAST(data->>'num' AS integer) < 400 GROUP BY data->>'thousandth';"
 
 
 class Query11PJson(Query):
     def __init__(self):
         super(Query11PJson, self).__init__("Join Query 11")
 
+    def prepare(self):
+        #getting 0.1 percent of data
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
+
     def db_command(self):
-        return None
-        return pjson_db.execute_sql("""SELECT * FROM nobench_main AS left INNER JOIN
-                                nobench_main AS right ON (left.nested_obj.str =
-                                right.str1) WHERE left.num BETWEEN XXXXX AND YYYYY;""")
+        jsonb_query = (
+            "SELECT a.data FROM pjson_main a INNER JOIN pjson_main b"
+            " ON (a.data ->> 'str1' = b.data #>> '{{nested_obj,str}}')"
+            " WHERE CAST(a.data->>'num' AS integer) >= {}"
+            " AND CAST(a.data->>'num' AS integer) < {};".format(
+                self.arguments[0], self.arguments[1]
+            )
+        )
+        cur = pjson_db.cursor()
+        cur.execute(jsonb_query)
+        return cur
 
 
 class Query12PJson(Query):
