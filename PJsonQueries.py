@@ -31,15 +31,6 @@ except Exception as e:
     recommended_strings = []
 
 
-class PrepFilesPJson(Query):
-    def __init__(self, filename):
-        super(PrepFilesPJson, self).__init__("Preparing files for PJson consumption")
-        self.filename = filename
-
-    def db_command(self):
-        pass
-
-
 class Query1PJson(Query):
     def __init__(self):
         super(Query1PJson, self).__init__("Projection Query 1")
@@ -226,27 +217,11 @@ class Query12PJson(Query):
         super(Query12PJson, self).__init__("Data Addition Query 12")
 
     def db_command(self):
-        return None
-
-        PrepFilesPJson(PJSON_EXTRA_FILENAME).execute()
-        bool_copy_cmd = "COPY argo_nobench_main_bool(objid, keystr, valbool) FROM '{0}' WITH DELIMITER '|';".format(
-                PJSON_FILE_DIR + 'nobench_data_argo_extra_bool.txt')
-        load_bool = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", bool_copy_cmd],
-                                     stdout=subprocess.PIPE)
-
-        num_copy_cmd = "COPY argo_nobench_main_num(objid, keystr, valnum) FROM '{0}' WITH DELIMITER '|';".format(
-                PJSON_FILE_DIR + 'nobench_data_argo_extra_num.txt')
-        load_num = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", num_copy_cmd],
+        pjson_load_cmd = "COPY pjson_main FROM '{0}';".format(
+                PJSON_FILE_DIR + PJSON_EXTRA_FILENAME)
+        load_pjson = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "pjson", "-c", pjson_load_cmd],
                                     stdout=subprocess.PIPE)
-
-        str_copy_cmd = "COPY argo_nobench_main_str(objid, keystr, valstr) FROM '{0}' WITH DELIMITER '|';".format(
-                PJSON_FILE_DIR + 'nobench_data_argo_extra_str.txt')
-        load_str = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", str_copy_cmd],
-                                    stdout=subprocess.PIPE)
-
-        load_bool.communicate()
-        load_num.communicate()
-        load_str.communicate()
+        load_pjson.communicate()
 
 
 class Query13PJson(Query):
@@ -304,9 +279,6 @@ class InitialLoadPJson(Query):
         super(InitialLoadPJson, self).__init__("Loading Initial Data into PJson")
 
     def db_command(self):
-        print "Starting..."
-        PrepFilesPJson(PJSON_FILENAME).execute()
-
         pjson_load_cmd = "CREATE TABLE pjson_main(data jsonb);"
         pjson_load_cmd += "COPY pjson_main FROM '{0}';".format(
                 PJSON_FILE_DIR + PJSON_FILENAME)
