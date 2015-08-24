@@ -22,7 +22,6 @@ import string
 from Settings import (
     DATA_SIZE,
     DEEPLY_NESTED,
-    FAT_OBJECTS,
     GENERIC_FILENAME,
     GENERIC_EXTRA_FILENAME,
 )
@@ -171,14 +170,9 @@ def generate_object(seed, total_seeds, corpus, word_counts):
             "level_3": level_3
         }
 
-        obj["multiply_nested_obj"] = {
+        obj["deep_nested_obj"] = {
             "level_2": level_2
         }
-
-    if FAT_OBJECTS:
-        for i in range(0, 100):
-            my_string = " ".join([encode_string(element) for element in range(seed, seed + 10)])
-            obj[encode_string(i + 1)] = my_string
 
     # Sparse attributes. Out of 1000 possible attributes, a "cluster" of 10 is
     # defined in any given object.

@@ -163,7 +163,7 @@ if __name__ == "__main__":
     pjson_loader = PJsonQueries.InitialLoadPJson()
     pjson_dropper = PJsonQueries.DropCollectionPJson()
     pjson_queries = [q1p, q2p, q3p, q4p, q5p, q6p, q7p, q8p, q9p, q10p, q11p, q12p, q13p, q14p]
-    pjson_include_indexes = range(0,12)
+    pjson_include_indexes = range(0,14)
     pjson_skip_indexes = []
     pjson_test_suite = TestSuite(
         tag='PJson',

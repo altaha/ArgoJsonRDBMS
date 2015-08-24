@@ -6,6 +6,7 @@ import random
 import subprocess
 
 from bench_utils import get_random_data_slice
+from nobench_gendata import encode_string
 from Query import Query
 from Global import pjson_db
 from Settings import (
@@ -76,13 +77,8 @@ class Query5PJson(Query):
         super(Query5PJson, self).__init__("Selection Query 5")
 
     def prepare(self):
-        cur = pjson_db.cursor()
-        cur.execute("SELECT data ->> 'str1' FROM pjson_main;")
-        halfway_index = cur.rowcount / 2
-        cur.scroll(halfway_index)
-        result = cur.fetchone()
-        self.arguments.append(result[0])
-        cur.close()
+        seed = random.randint(0, DATA_SIZE - 1)
+        self.arguments = [encode_string(seed)]
 
     def db_command(self):
         cur = pjson_db.cursor()
@@ -229,18 +225,21 @@ class Query13PJson(Query):
         super(Query13PJson, self).__init__("Deep Select Query 13")
 
     def prepare(self):
-        return None
-        res = pjson_db.execute_sql('SELECT multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single FROM nobench_main')
-        index = 5
-        for i, result in enumerate(res):
-            if i == index:
-                word = result['multiply_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_single']
-                self.arguments.append(word)
-                break
+        seed = random.randint(0, DATA_SIZE - 1)
+        self.arguments = [encode_string(seed)]
+        self.arguments = ['GBRDCMBQGAYDCMJRGAYDCMJQGA======']
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql('SELECT * FROM  nobench_main WHERE multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single = "{}"'.format(self.arguments[0]))
+        jsonb_query = (
+            "SELECT * FROM pjson_main"
+            " WHERE data #>> '{{deep_nested_obj,level_2,level_3,level_4"
+            ",level_5,level_6,level_7,level_8,deep_str_single}}' = '{0}';".format(
+                self.arguments[0]
+            )
+        )
+        cur = pjson_db.cursor()
+        cur.execute(jsonb_query)
+        return cur
 
 
 class Query14PJson(Query):
@@ -248,20 +247,23 @@ class Query14PJson(Query):
         super(Query14PJson, self).__init__("Deep Select Query 14")
 
     def prepare(self):
-        return None
-        res = pjson_db.execute_sql('SELECT multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg FROM nobench_main')
-        index = 5
-        for i, result in enumerate(res):
-            if i == index:
-                word = result['multiply_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_agg']
-                self.arguments.append(word)
-                break
+        seed = random.randint(0, 9)
+        self.arguments = [encode_string(seed)]
+        self.arguments = ['GBRDCMA=']
 
     def db_command(self):
-        return None
-        return pjson_db.execute_sql("""SELECT multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg
-                                        FROM nobench_main
-                                        WHERE multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg = "{}";""".format(self.arguments[0]))
+        jsonb_query = (
+            "SELECT data #>> '{{deep_nested_obj,level_2,level_3,level_4"
+            ",level_5,level_6,level_7,level_8,deep_str_agg}}' FROM pjson_main"
+            " WHERE data #>> '{{deep_nested_obj,level_2,level_3,level_4"
+            ",level_5,level_6,level_7,level_8,deep_str_agg}}' = '{0}';".format(
+                self.arguments[0]
+            )
+        )
+        cur = pjson_db.cursor()
+        cur.execute(jsonb_query)
+        return cur
+
 
 class DropCollectionPJson(Query):
     def __init__(self):

@@ -207,16 +207,16 @@ class Query13Argo(Query):
         super(Query13Argo, self).__init__("Deep Select Query 13")
 
     def prepare(self):
-        res = argo_db.execute_sql('SELECT multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single FROM nobench_main')
+        res = argo_db.execute_sql('SELECT deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single FROM nobench_main')
         index = 5
         for i, result in enumerate(res):
             if i == index:
-                word = result['multiply_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_single']
+                word = result['deep_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_single']
                 self.arguments.append(word)
                 break
 
     def db_command(self):
-        return argo_db.execute_sql('SELECT * FROM  nobench_main WHERE multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single = "{}"'.format(self.arguments[0]))
+        return argo_db.execute_sql('SELECT * FROM  nobench_main WHERE deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single = "{}"'.format(self.arguments[0]))
 
 
 class Query14Argo(Query):
@@ -224,18 +224,18 @@ class Query14Argo(Query):
         super(Query14Argo, self).__init__("Deep Select Query 14")
 
     def prepare(self):
-        res = argo_db.execute_sql('SELECT multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg FROM nobench_main')
+        res = argo_db.execute_sql('SELECT deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg FROM nobench_main')
         index = 5
         for i, result in enumerate(res):
             if i == index:
-                word = result['multiply_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_agg']
+                word = result['deep_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_agg']
                 self.arguments.append(word)
                 break
 
     def db_command(self):
-        return argo_db.execute_sql("""SELECT multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg
+        return argo_db.execute_sql("""SELECT deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg
                                         FROM nobench_main
-                                        WHERE multiply_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg = "{}";""".format(self.arguments[0]))
+                                        WHERE deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg = "{}";""".format(self.arguments[0]))
 
 class DropCollectionArgo(Query):
     def __init__(self):
