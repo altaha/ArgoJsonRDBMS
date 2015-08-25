@@ -196,7 +196,7 @@ class Query11PJson(Query):
 
     def db_command(self):
         jsonb_query = (
-            "SELECT a.data FROM pjson_main a INNER JOIN pjson_main b"
+            "SELECT * FROM pjson_main a INNER JOIN pjson_main b"
             " ON (a.data ->> 'str1' = b.data #>> '{{nested_obj,str}}')"
             " WHERE CAST(a.data->>'num' AS integer) >= {}"
             " AND CAST(a.data->>'num' AS integer) < {};".format(
