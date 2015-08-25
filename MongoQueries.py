@@ -14,7 +14,7 @@ from Settings import (
     MONGO_EXTRA_FILENAME,
     MONGO_PICKLE_FILENAME,
 )
-from Global import data, mongo_db
+from Global import mongo_data, mongo_db
 
 
 __author__ = 'Gary'
@@ -55,7 +55,7 @@ class Query1Mongo(Query):
         super(Query1Mongo, self).__init__("Projection Query 1")
 
     def db_command(self):
-        return data.find({}, ["str1", "num"])
+        return mongo_data.find({}, ["str1", "num"])
 
 
 class Query2Mongo(Query):
@@ -65,7 +65,7 @@ class Query2Mongo(Query):
         super(Query2Mongo, self).__init__("Projection Query 2")
 
     def db_command(self):
-        return data.find({}, ["nested_obj.str", "nested_obj.num"])
+        return mongo_data.find({}, ["nested_obj.str", "nested_obj.num"])
 
 
 class Query3Mongo(Query):
@@ -74,7 +74,7 @@ class Query3Mongo(Query):
         super(Query3Mongo, self).__init__("Projection Query 3")
 
     def db_command(self):
-        return data.find(
+        return mongo_data.find(
             {"$or": [{"sparse_110": {"$exists": True}},
                         {"sparse_119": {"$exists": True}}]},
             ["sparse_110", "sparse_919"])
@@ -85,7 +85,7 @@ class Query4Mongo(Query):
         super(Query4Mongo, self).__init__("Projection Query 4")
 
     def db_command(self):
-        return data.find(
+        return mongo_data.find(
             {"$or": [{"sparse_110": {"$exists": True}},
                         {"sparse_229": {"$exists": True}}]},
             ["sparse_110", "sparse_919"])
@@ -100,7 +100,7 @@ class Query5Mongo(Query):
         self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
-        return data.find({"str1": "{}".format(self.arguments[0])})
+        return mongo_data.find({"str1": "{}".format(self.arguments[0])})
 
 
 class Query6Mongo(Query):
@@ -113,7 +113,7 @@ class Query6Mongo(Query):
 
     def db_command(self):
         #Select 0.1% of data. 1000 rows in this case.
-        return data.find({"$and": [{"num": {"$gte": self.arguments[0]}}, {"num": {"$lt": self.arguments[1]}}]})
+        return mongo_data.find({"$and": [{"num": {"$gte": self.arguments[0]}}, {"num": {"$lt": self.arguments[1]}}]})
 
 
 class Query7Mongo(Query):
@@ -126,7 +126,7 @@ class Query7Mongo(Query):
 
     def db_command(self):
         #Select 0.1% of data. 1000 rows in this case.
-        return data.find({"$and": [{"dyn1": {"$gte": self.arguments[0]}}, {"dyn1": {"$lt": self.arguments[1]}}]})
+        return mongo_data.find({"$and": [{"dyn1": {"$gte": self.arguments[0]}}, {"dyn1": {"$lt": self.arguments[1]}}]})
 
 
 class Query8Mongo(Query):
@@ -140,7 +140,7 @@ class Query8Mongo(Query):
         self.arguments.append(recommended_strings[0])
 
     def db_command(self):
-        return data.find({"nested_arr": self.arguments[0]})
+        return mongo_data.find({"nested_arr": self.arguments[0]})
 
 
 class Query9Mongo(Query):
@@ -149,7 +149,7 @@ class Query9Mongo(Query):
         super(Query9Mongo, self).__init__("Selection Query 9")
 
     def prepare(self):
-        results = data.find({}, {"sparse_500": 1, "_id": 0})
+        results = mongo_data.find({}, {"sparse_500": 1, "_id": 0})
         for index, result in enumerate(results):
             try:
                 self.arguments.append(result['sparse_500'])
@@ -159,7 +159,7 @@ class Query9Mongo(Query):
                 break
 
     def db_command(self):
-        return data.find({"sparse_500": self.arguments[0]})
+        return mongo_data.find({"sparse_500": self.arguments[0]})
 
 
 class Query10Mongo(Query):
@@ -172,7 +172,7 @@ class Query10Mongo(Query):
 
     def db_command(self):
 
-        return data.group(
+        return mongo_data.group(
             {"thousandth": True},
             {"$and": [{"num": {"$gte": self.arguments[0]}}, {"num": {"$lt": self.arguments[1]}}]},
             {"total": 0},
@@ -189,20 +189,19 @@ class Query11Mongo(Query):
         super(Query11Mongo, self).__init__("Join Query 11")
 
     def db_command(self):
-        map = Code("""
+        map_method = Code("""
             function() {
             var output ={neststr:this.nested_obj.str, str1:this.str1, num:this.num}
                 emit(this._id, output)
             }
         """)
-        reduce = Code("""
-            function(key, values)
-
+        reduce_method = Code("""
+            function(key, values) {
+            }
         """)
-        data.map_reduce(
 
+        mongo_data.map_reduce(
         )
-        #implement a mapreduce job?
         pass
 
 
@@ -226,7 +225,7 @@ class Query13Mongo(Query):
         self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
-        return data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single": self.arguments[0]})
+        return mongo_data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single": self.arguments[0]})
 
 
 class Query14Mongo(Query):
@@ -238,7 +237,7 @@ class Query14Mongo(Query):
         self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
-        return data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg": self.arguments[0]})
+        return mongo_data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg": self.arguments[0]})
 
 
 class InitialLoadMongo(Query):
