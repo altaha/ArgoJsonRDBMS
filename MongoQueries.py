@@ -188,21 +188,32 @@ class Query11Mongo(Query):
     def __init__(self):
         super(Query11Mongo, self).__init__("Join Query 11")
 
+    def prepare(self):
+        # get 0.1% of data
+        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
+
     def db_command(self):
-        map_method = Code("""
-            function() {
-            var output ={neststr:this.nested_obj.str, str1:this.str1, num:this.num}
-                emit(this._id, output)
-            }
-        """)
-        reduce_method = Code("""
+        mapper = Code("""
+            function() {{
+                if (this.num >= {0} && this.num < {1}) {{
+                    emit(this.nested_obj.str, this.value);
+                    emit(this.str1, this.value);
+                }}
+            }}
+        """.format(self.arguments[0], self.arguments[1]))
+        reducer = Code("""
             function(key, values) {
+                var reduced = {"data": []};
+                for (var i in values) {
+                    reduced.data.push(i);
+                }
+                return reduced;
             }
         """)
 
-        mongo_data.map_reduce(
-        )
-        pass
+        return mongo_data.map_reduce(
+            mapper, reducer, 'mongo_join'
+        ).find()
 
 
 class Query12Mongo(Query):

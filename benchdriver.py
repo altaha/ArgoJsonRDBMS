@@ -142,7 +142,7 @@ if __name__ == "__main__":
     mongo_dropper = MongoQueries.DropCollectionMongo()
     mongo_queries = [q1m, q2m, q3m, q4m, q5m, q6m, q7m, q8m, q9m, q10m, q11m, q12m, q13m, q14m]
     mongo_include_indexes = range(0, 14)
-    mongo_skip_indexes = [10]
+    mongo_skip_indexes = []
     mongo_test_suite = TestSuite(
         tag='Mongo',
         loader=mongo_loader,
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         skip_indexes=pjson_skip_indexes,
     )
 
-    run_argo_bench = True
+    run_argo_bench = False
     run_mongo_bench = True
     run_pjson_bench = True
 
