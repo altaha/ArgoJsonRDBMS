@@ -113,7 +113,7 @@ if __name__ == "__main__":
     argo_loader = ArgoQueries.InitialLoadArgo()
     argo_dropper = ArgoQueries.DropCollectionArgo()
     argo_queries = [q1a, q2a, q3a, q4a, q5a, q6a, q7a, q8a, q9a, q10a, q11a, q12a, q13a, q14a]
-    argo_include_indexes = range(0,12)
+    argo_include_indexes = range(0, 14)
     argo_skip_indexes = [10]
     argo_test_suite = TestSuite(
         tag='Argo',
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     mongo_loader = MongoQueries.InitialLoadMongo()
     mongo_dropper = MongoQueries.DropCollectionMongo()
     mongo_queries = [q1m, q2m, q3m, q4m, q5m, q6m, q7m, q8m, q9m, q10m, q11m, q12m, q13m, q14m]
-    mongo_include_indexes = range(0,12)
+    mongo_include_indexes = range(0, 14)
     mongo_skip_indexes = [10]
     mongo_test_suite = TestSuite(
         tag='Mongo',
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     pjson_loader = PJsonQueries.InitialLoadPJson()
     pjson_dropper = PJsonQueries.DropCollectionPJson()
     pjson_queries = [q1p, q2p, q3p, q4p, q5p, q6p, q7p, q8p, q9p, q10p, q11p, q12p, q13p, q14p]
-    pjson_include_indexes = range(0,14)
+    pjson_include_indexes = range(0, 14)
     pjson_skip_indexes = []
     pjson_test_suite = TestSuite(
         tag='PJson',

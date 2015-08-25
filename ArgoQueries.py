@@ -78,12 +78,8 @@ class Query5Argo(Query):
         super(Query5Argo, self).__init__("Selection Query 5")
 
     def prepare(self):
-        halfway_index = DATA_SIZE / 2
-        results = argo_db.execute_sql("SELECT str1 FROM nobench_main")
-        for index, result in enumerate(results):
-
-            if index == halfway_index:
-                self.arguments.append(result['str1'])
+        seed = random.randint(0, DATA_SIZE - 1)
+        self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
         return argo_db.execute_sql(
@@ -207,13 +203,8 @@ class Query13Argo(Query):
         super(Query13Argo, self).__init__("Deep Select Query 13")
 
     def prepare(self):
-        res = argo_db.execute_sql('SELECT deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single FROM nobench_main')
-        index = 5
-        for i, result in enumerate(res):
-            if i == index:
-                word = result['deep_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_single']
-                self.arguments.append(word)
-                break
+        seed = random.randint(0, DATA_SIZE - 1)
+        self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
         return argo_db.execute_sql('SELECT * FROM  nobench_main WHERE deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single = "{}"'.format(self.arguments[0]))
@@ -224,13 +215,8 @@ class Query14Argo(Query):
         super(Query14Argo, self).__init__("Deep Select Query 14")
 
     def prepare(self):
-        res = argo_db.execute_sql('SELECT deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg FROM nobench_main')
-        index = 5
-        for i, result in enumerate(res):
-            if i == index:
-                word = result['deep_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_agg']
-                self.arguments.append(word)
-                break
+        seed = random.randint(0, 9)
+        self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
         return argo_db.execute_sql("""SELECT deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg

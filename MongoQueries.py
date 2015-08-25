@@ -96,12 +96,8 @@ class Query5Mongo(Query):
         super(Query5Mongo, self).__init__("Selection Query 5")
 
     def prepare(self):
-        halfway_index = DATA_SIZE / 2
-        results = data.find({}, {"str1": 1, "_id": 0})
-        for index, result in enumerate(results):
-
-            if index == halfway_index:
-                self.arguments.append(result['str1'])
+        seed = random.randint(0, DATA_SIZE - 1)
+        self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
         return data.find({"str1": "{}".format(self.arguments[0])})
@@ -226,11 +222,8 @@ class Query13Mongo(Query):
         super(Query13Mongo, self).__init__("Deep nest Query 13")
 
     def prepare(self):
-        halfway_index = DATA_SIZE / 2
-        results = data.find({}, {"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single": 1, "_id": 0})
-        for index, result in enumerate(results):
-            if index == halfway_index:
-                self.arguments.append(result['deep_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_single'])
+        seed = random.randint(0, DATA_SIZE - 1)
+        self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
         return data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_single": self.arguments[0]})
@@ -241,11 +234,8 @@ class Query14Mongo(Query):
         super(Query14Mongo, self).__init__("Deep aggregation Query 14")
 
     def prepare(self):
-        halfway_index = DATA_SIZE / 2
-        results = data.find({}, {"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg": 1, "_id": 0})
-        for index, result in enumerate(results):
-            if index == halfway_index:
-                self.arguments.append(result['deep_nested_obj']['level_2']['level_3']['level_4']['level_5']['level_6']['level_7']['level_8']['deep_str_agg'])
+        seed = random.randint(0, 9)
+        self.arguments = [nobench_gendata.encode_string(seed)]
 
     def db_command(self):
         return data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg": self.arguments[0]})

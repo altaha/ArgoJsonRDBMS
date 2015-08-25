@@ -227,7 +227,6 @@ class Query13PJson(Query):
     def prepare(self):
         seed = random.randint(0, DATA_SIZE - 1)
         self.arguments = [encode_string(seed)]
-        self.arguments = ['GBRDCMBQGAYDCMJRGAYDCMJQGA======']
 
     def db_command(self):
         jsonb_query = (
@@ -249,7 +248,6 @@ class Query14PJson(Query):
     def prepare(self):
         seed = random.randint(0, 9)
         self.arguments = [encode_string(seed)]
-        self.arguments = ['GBRDCMA=']
 
     def db_command(self):
         jsonb_query = (
