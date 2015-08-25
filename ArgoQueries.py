@@ -10,7 +10,7 @@ from bench_utils import get_random_data_slice
 from Query import Query
 from Global import argo_db, psql_db
 from Settings import (
-    ARGO_FILE_DIR,
+    FILES_DIR,
     ARGO_FILENAME,
     ARGO_EXTRA_FILENAME,
     ARGO_PICKLE_FILENAME,
@@ -183,17 +183,17 @@ class Query12Argo(Query):
 
         PrepFilesArgo(ARGO_EXTRA_FILENAME).execute()
         bool_copy_cmd = "COPY argo_nobench_main_bool(objid, keystr, valbool) FROM '{0}' WITH DELIMITER '|';".format(
-                ARGO_FILE_DIR + 'nobench_data_argo_extra_bool.txt')
+                FILES_DIR + 'nobench_data_argo_extra_bool.txt')
         load_bool = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", bool_copy_cmd],
                                      stdout=subprocess.PIPE)
 
         num_copy_cmd = "COPY argo_nobench_main_num(objid, keystr, valnum) FROM '{0}' WITH DELIMITER '|';".format(
-                ARGO_FILE_DIR + 'nobench_data_argo_extra_num.txt')
+                FILES_DIR + 'nobench_data_argo_extra_num.txt')
         load_num = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", num_copy_cmd],
                                     stdout=subprocess.PIPE)
 
         str_copy_cmd = "COPY argo_nobench_main_str(objid, keystr, valstr) FROM '{0}' WITH DELIMITER '|';".format(
-                ARGO_FILE_DIR + 'nobench_data_argo_extra_str.txt')
+                FILES_DIR + 'nobench_data_argo_extra_str.txt')
         load_str = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", str_copy_cmd],
                                     stdout=subprocess.PIPE)
 
@@ -254,17 +254,17 @@ class InitialLoadArgo(Query):
         PrepFilesArgo(ARGO_FILENAME).execute()
 
         bool_copy_cmd = "COPY argo_nobench_main_bool(objid, keystr, valbool) FROM '{0}' WITH DELIMITER '|';".format(
-                ARGO_FILE_DIR + 'nobench_data_argo_bool.txt')
+                FILES_DIR + 'nobench_data_argo_bool.txt')
         load_bool = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", bool_copy_cmd],
                                      stdout=subprocess.PIPE)
 
         num_copy_cmd = "COPY argo_nobench_main_num(objid, keystr, valnum) FROM '{0}' WITH DELIMITER '|';".format(
-                ARGO_FILE_DIR + 'nobench_data_argo_num.txt')
+                FILES_DIR + 'nobench_data_argo_num.txt')
         load_num = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", num_copy_cmd],
                                     stdout=subprocess.PIPE)
 
         str_copy_cmd = "COPY argo_nobench_main_str(objid, keystr, valstr) FROM '{0}' WITH DELIMITER '|';".format(
-                ARGO_FILE_DIR + 'nobench_data_argo_str.txt')
+                FILES_DIR + 'nobench_data_argo_str.txt')
         load_str = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "argo", "-c", str_copy_cmd],
                                     stdout=subprocess.PIPE)
 

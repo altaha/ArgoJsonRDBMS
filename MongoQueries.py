@@ -9,7 +9,7 @@ from bench_utils import get_random_data_slice
 from Query import Query
 from Settings import (
     DATA_SIZE,
-    MONGO_FILE_DIR,
+    FILES_DIR,
     MONGO_FILENAME,
     MONGO_EXTRA_FILENAME,
     MONGO_PICKLE_FILENAME,
@@ -216,7 +216,7 @@ class Query12Mongo(Query):
 
     def db_command(self):
         #make a subprocess call to mongoimport
-        extra_file_name = MONGO_FILE_DIR + MONGO_EXTRA_FILENAME
+        extra_file_name = FILES_DIR + MONGO_EXTRA_FILENAME
         load_data = subprocess.Popen(["mongoimport", "--db", "argocompdb", "--collection", "sampledata", "--file", extra_file_name], stdout=subprocess.PIPE)
         load_data.communicate()
 
@@ -257,6 +257,6 @@ class InitialLoadMongo(Query):
 
     def db_command(self):
         #make a subprocess call to mongoimport
-        file_name = MONGO_FILE_DIR + MONGO_FILENAME
+        file_name = FILES_DIR + MONGO_FILENAME
         load_data = subprocess.Popen(["mongoimport", "--db", "argocompdb", "--collection", "sampledata", "--file", file_name], stdout=subprocess.PIPE)
         load_data.communicate()

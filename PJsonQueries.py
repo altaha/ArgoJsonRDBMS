@@ -10,7 +10,7 @@ from nobench_gendata import encode_string
 from Query import Query
 from Global import pjson_db
 from Settings import (
-    PJSON_FILE_DIR,
+    FILES_DIR,
     PJSON_FILENAME,
     PJSON_EXTRA_FILENAME,
     PJSON_PICKLE_FILENAME,
@@ -214,7 +214,7 @@ class Query12PJson(Query):
 
     def db_command(self):
         pjson_load_cmd = "COPY pjson_main FROM '{0}';".format(
-                PJSON_FILE_DIR + PJSON_EXTRA_FILENAME)
+                FILES_DIR + PJSON_EXTRA_FILENAME)
         load_pjson = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "pjson", "-c", pjson_load_cmd],
                                     stdout=subprocess.PIPE)
         load_pjson.communicate()
@@ -283,7 +283,7 @@ class InitialLoadPJson(Query):
     def db_command(self):
         pjson_load_cmd = "CREATE TABLE pjson_main(data jsonb);"
         pjson_load_cmd += "COPY pjson_main FROM '{0}';".format(
-                PJSON_FILE_DIR + PJSON_FILENAME)
+                FILES_DIR + PJSON_FILENAME)
         pjson_load_cmd += "CREATE INDEX on pjson_main USING GIN (data);"
 
         load_pjson = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "pjson", "-c", pjson_load_cmd],
