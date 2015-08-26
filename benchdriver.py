@@ -165,7 +165,7 @@ if __name__ == "__main__":
     if run_pjson_bench:
         generate_pjson_data = True
         load_pjson_data = True
-        log.info("Beginning Mongo Benchmark.")
+        log.info("Beginning PJson Benchmark.")
         if generate_pjson_data:
             log.info("PJSON Generate new Data flag was true. Using Mongo's data.")
         if load_pjson_data:
