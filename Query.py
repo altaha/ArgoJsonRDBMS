@@ -20,11 +20,8 @@ class Query(object):
         results = self.db_command()
         count = 0
         if results:
-            if hasattr(results, '__len__'):
-                count = len(results)
-            else:
-                for item in results:
-                    count += 1
+            for item in results:
+                count += 1
         end = time.clock()
         log.info(self.tag + " took " + "%.2f" % (end - start) + " seconds. Returned " + str(count) + " records.")
         try:
