@@ -22,12 +22,11 @@ log = logging.getLogger(__name__)
 
 class Query1PJson(Query):
     def __init__(self):
-        super(Query1PJson, self).__init__("Projection Query 1")
+        super(Query1PJson, self).__init__("Selection Query 1")
 
     def prepare(self):
-        #getting 10 percent of data
+        # getting 10 percent of data
         self.arguments = get_random_data_slice(DATA_SIZE, 0.1)
-        self.arguments = [0,1]
 
     def db_command(self):
         cur = pjson_db.cursor()
@@ -42,206 +41,21 @@ class Query1PJson(Query):
 
 class Query2PJson(Query):
     def __init__(self):
-        super(Query2PJson, self).__init__("Projection Query 2")
-
-    def db_command(self):
-        cur = pjson_db.cursor()
-        cur.execute("SELECT data #> '{nested_obj,str}' AS nested_str, data #> '{nested_obj,num}' AS nested_num FROM pjson_blog;")
-        return cur
-
-
-class Query3PJson(Query):
-    def __init__(self):
-        super(Query3PJson, self).__init__("Projection Query 3")
-
-    def db_command(self):
-        cur = pjson_db.cursor()
-        cur.execute("SELECT data -> 'sparse_110' AS sparse_110, data -> 'sparse_119' AS sparse_119 FROM pjson_blog WHERE data ?& array['sparse_110', 'sparse_119'];")
-        return cur
-
-
-class Query4PJson(Query):
-    def __init__(self):
-        super(Query4PJson, self).__init__("Projection Query 4")
-
-    def db_command(self):
-        cur = pjson_db.cursor()
-        cur.execute("SELECT data -> 'sparse_305' AS sparse_305, data -> 'sparse_991' AS sparse_991 FROM pjson_blog WHERE data ?| array['sparse_305', 'sparse_991'];")
-        return cur
-
-
-class Query5PJson(Query):
-    def __init__(self):
-        super(Query5PJson, self).__init__("Selection Query 5")
+        super(Query2PJson, self).__init__("Selection Query 2")
 
     def prepare(self):
-        seed = random.randint(0, DATA_SIZE - 1)
-        self.arguments = [encode_string(seed)]
-
-    def db_command(self):
-        cur = pjson_db.cursor()
-        cur.execute(
-            "SELECT * FROM pjson_blog WHERE data ->> 'str1' = '{}';".format(self.arguments[0])
-        )
-        return cur
-
-
-class Query6PJson(Query):
-    def __init__(self):
-        super(Query6PJson, self).__init__("Selection Query 6")
-
-    def prepare(self):
-        #getting 0.1 percent of data
-        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
-
-    def db_command(self):
-        cur = pjson_db.cursor()
-        cur.execute(
-            "SELECT * FROM pjson_blog WHERE CAST(data->>'num' AS integer) >= {}"
-            " AND CAST(data->>'num' AS integer) < {};".format(
-                self.arguments[0], self.arguments[1]
-            )
-        )
-        return cur
-
-
-class Query7PJson(Query):
-    def __init__(self):
-        super(Query7PJson, self).__init__("Selection Query 7")
-
-    def prepare(self):
-        #getting 0.1 percent of data
-        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
-
-    def db_command(self):
-        cur = pjson_db.cursor()
-        cur.execute(
-            "SELECT * FROM pjson_blog WHERE data->>'dyn1' >= '{}' AND data->>'dyn1' < '{}';".format(
-                self.arguments[0], self.arguments[1]
-            )
-        )
-        return cur
-
-
-class Query8PJson(Query):
-    def __init__(self):
-        super(Query8PJson, self).__init__("Selection Query 8")
-
-    def prepare(self):
-        global recommended_strings
-        random.seed()
-        random.shuffle(recommended_strings)
-        self.arguments.append(recommended_strings[0])
-
-    def db_command(self):
-        search_term = self.arguments[0]
-        jsonb_query = "SELECT * from pjson_blog WHERE data @> '{0}';".format(
-            json.dumps({'nested_arr': [search_term]})
-        )
-        cur = pjson_db.cursor()
-        cur.execute(jsonb_query)
-        return cur
-        #jsonb = "SELECT * from pjson_blog WHERE data @> '{"nested_arr": ["interested"]}';"
-
-class Query9PJson(Query):
-    def __init__(self):
-        super(Query9PJson, self).__init__("Selection Query 9")
-
-    def prepare(self):
-        cur = pjson_db.cursor()
-        cur.execute("SELECT data->>'sparse_500' from pjson_blog WHERE data ? 'sparse_500';")
-        for index, result in enumerate(cur):
-            if index == 5:
-                self.arguments.append(result[0])
-
-
-    def db_command(self):
-        jsonb_query = "SELECT * FROM pjson_blog WHERE data ->> 'sparse_500' = '{0}';".format(
-            self.arguments[0])
-        cur = pjson_db.cursor()
-        cur.execute(jsonb_query)
-        return cur
-
-
-class Query10PJson(Query):
-    def __init__(self):
-        super(Query10PJson, self).__init__("Aggregation Query 10")
-
-    def prepare(self):
-        #getting 10 percent of data
+        # getting 10 percent of data
         self.arguments = get_random_data_slice(DATA_SIZE, 0.1)
 
     def db_command(self):
         jsonb_query = (
-            "SELECT COUNT(*) FROM pjson_blog WHERE CAST(data->>'num' AS integer) >= {}"
-            " AND CAST(data->>'num' AS integer) < {}"
-            " GROUP BY data->>'thousandth';".format(
+            "Drop TABLE IF EXISTS temptable;"
+            " SELECT jsonb_array_elements(jsonb_array_elements("
+            "data -> 'authored') -> 'comments')"
+            " AS comments INTO temptable FROM pjson_blog;"
+            " SELECT * FROM temptable WHERE CAST(comments->>'user_id' AS integer) >= {0}"
+            " AND CAST(comments->>'user_id' AS integer) < {1};".format(
                 self.arguments[0], self.arguments[1]
-            )
-        )
-        cur = pjson_db.cursor()
-        cur.execute(jsonb_query)
-        return cur
-
-
-class Query11PJson(Query):
-    def __init__(self):
-        super(Query11PJson, self).__init__("Join Query 11")
-
-    def prepare(self):
-        #getting 0.1 percent of data
-        self.arguments = get_random_data_slice(DATA_SIZE, 0.001)
-
-    def db_command(self):
-        jsonb_query = (
-            "SELECT * FROM pjson_blog a INNER JOIN pjson_blog b"
-            " ON (a.data ->> 'str1' = b.data #>> '{{nested_obj,str}}')"
-            " WHERE CAST(a.data->>'num' AS integer) >= {}"
-            " AND CAST(a.data->>'num' AS integer) < {};".format(
-                self.arguments[0], self.arguments[1]
-            )
-        )
-        cur = pjson_db.cursor()
-        cur.execute(jsonb_query)
-        return cur
-
-
-class Query13PJson(Query):
-    def __init__(self):
-        super(Query13PJson, self).__init__("Deep Select Query 13")
-
-    def prepare(self):
-        seed = random.randint(0, DATA_SIZE - 1)
-        self.arguments = [encode_string(seed)]
-
-    def db_command(self):
-        jsonb_query = (
-            "SELECT * FROM pjson_blog"
-            " WHERE data #>> '{{deep_nested_obj,level_2,level_3,level_4"
-            ",level_5,level_6,level_7,level_8,deep_str_single}}' = '{0}';".format(
-                self.arguments[0]
-            )
-        )
-        cur = pjson_db.cursor()
-        cur.execute(jsonb_query)
-        return cur
-
-
-class Query14PJson(Query):
-    def __init__(self):
-        super(Query14PJson, self).__init__("Deep Select Query 14")
-
-    def prepare(self):
-        seed = random.randint(0, 9)
-        self.arguments = [encode_string(seed)]
-
-    def db_command(self):
-        jsonb_query = (
-            "SELECT data #>> '{{deep_nested_obj,level_2,level_3,level_4"
-            ",level_5,level_6,level_7,level_8,deep_str_agg}}' FROM pjson_blog"
-            " WHERE data #>> '{{deep_nested_obj,level_2,level_3,level_4"
-            ",level_5,level_6,level_7,level_8,deep_str_agg}}' = '{0}';".format(
-                self.arguments[0]
             )
         )
         cur = pjson_db.cursor()
@@ -254,7 +68,7 @@ class DropCollectionPJson(Query):
         super(DropCollectionPJson, self).__init__("Dropping Data from PJson Blog")
 
     def db_command(self):
-        pjson_drop_cmd = "DROP TABLE pjson_blog;"
+        pjson_drop_cmd = "DROP TABLE pjson_blog; DROP TABLE temptable;"
         drop_pjson = subprocess.Popen(["psql", "-w", "-U", PSQL_USER, "-d", "pjson", "-c", pjson_drop_cmd],
                                     stdout=subprocess.PIPE)
         drop_pjson.communicate()

@@ -51,24 +51,11 @@ if __name__ == "__main__":
 #    )
 
     q1p = PJsonQueries.Query1PJson()
-#    q2p = PJsonQueries.Query2PJson()
-#    q3p = PJsonQueries.Query3PJson()
-#    q4p = PJsonQueries.Query4PJson()
-#    q5p = PJsonQueries.Query5PJson()
-#    q6p = PJsonQueries.Query6PJson()
-#    q7p = PJsonQueries.Query7PJson()
-#    q8p = PJsonQueries.Query8PJson()
-#    q9p = PJsonQueries.Query9PJson()
-#    q10p = PJsonQueries.Query10PJson()
-#    q11p = PJsonQueries.Query11PJson()
-#    q12p = PJsonQueries.Query12PJson()
-#    q13p = PJsonQueries.Query13PJson()
-#    q14p = PJsonQueries.Query14PJson()
+    q2p = PJsonQueries.Query2PJson()
     pjson_loader = PJsonQueries.InitialLoadPJson()
     pjson_dropper = PJsonQueries.DropCollectionPJson()
-#    pjson_queries = [q1p, q2p, q3p, q4p, q5p, q6p, q7p, q8p, q9p, q10p, q11p, q12p, q13p, q14p]
-    pjson_queries = [q1p]
-    pjson_include_indexes = range(0, 1)
+    pjson_queries = [q1p, q2p]
+    pjson_include_indexes = range(0, 2)
     pjson_skip_indexes = []
     pjson_test_suite = TestSuite(
         tag='PJsonBlog',

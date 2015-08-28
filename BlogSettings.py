@@ -2,8 +2,8 @@ __author__ = 'Ahmed'
 
 FILES_DIR = '/home/vagrant/workspace/ArgoBench/ArgoJsonRDBMS/'
 
-MONGO_FILENAME = 'json_generator/blog_50000.json'
-PJSON_FILENAME= 'json_generator/blog_50000.json'
+MONGO_FILENAME= 'json_generator/blog_50000_parsed.json'
+PJSON_FILENAME= 'json_generator/blog_50000_parsed.json'
 
 RESULTS_FILENAME = 'json_generator/results.csv'
 
