@@ -16,13 +16,13 @@ class Query(object):
 
     def execute(self, object_count=None):
         self.prepare()
-        start = time.clock()
+        start = time.time()
         results = self.db_command()
         count = 0
         if results:
             for item in results:
                 count += 1
-        end = time.clock()
+        end = time.time()
         log.info(self.tag + " took " + "%.2f" % (end - start) + " seconds. Returned " + str(count) + " records.")
         try:
             results.close()
