@@ -1,0 +1,36 @@
+[
+  '{{repeat(10000)}}',
+  {
+    _id: '{{objectId()}}',
+    user_id: '{{index(0)}}',
+    profile_picture: 'http://myflicker.com/{{guid()}}',
+    name: '{{firstName()}} {{surname()}}',
+    company: '{{company()}}',
+    email: '{{email()}}',
+    join_date: '{{date(new Date(2014, 0, 1), new Date(), "YYYY-MM-ddThh:mm:ss")}}',
+    authored: [
+      '{{repeat(1, 3)}}',
+      {
+        post_id: '{{guid()}}',
+        body: '{{lorem(3, "paragraphs")}}',
+        rating: '{{integer(0, 10)}}',
+        latitude: '{{floating(-90.000001, 90)}}',
+        longitude: '{{floating(-180.000001, 180)}}',
+        tags: [
+          '{{repeat(0, 5)}}',
+          '{{lorem(1, "words")}}'
+        ],
+        comments: [
+          '{{repeat(0, 5)}}',
+          {
+            comment_id: '{{guid()}}',
+            user_id: '{{integer(0, 49999)}}',
+            comment: '{{lorem(3, "sentences")}}',
+            viewed: '{{bool()}}'
+          }
+        ]
+      }
+    ]
+  }
+]
+x5 (increase user_id startpoint by 10000 each time)
