@@ -251,6 +251,23 @@ class Query14Mongo(Query):
         return mongo_data.find({"deep_nested_obj.level_2.level_3.level_4.level_5.level_6.level_7.level_8.deep_str_agg": self.arguments[0]})
 
 
+class Query15Mongo(Query):
+    def __init__(self):
+        super(Query15Mongo, self).__init__("Data Update Query 15")
+
+    def prepare(self):
+        # Update 1% of the data
+        self.update_range = get_random_data_slice(DATA_SIZE, 0.01)
+        self.arguments = [(i, random.random()) for i in xrange(*self.update_range)]
+
+    def db_command(self):
+        for tup in self.arguments:
+            mongo_data.update(
+                {"num": {"$eq": tup[0]}},
+                {"$set": {"dyn2": tup[1]}},
+            )
+
+
 class InitialLoadMongo(Query):
     def __init__(self):
         super(InitialLoadMongo, self).__init__("Initial Data Load")
