@@ -9,7 +9,7 @@ mongo_client = MongoClient()
 print "connected to mongo"
 mongo_db = mongo_client.blogcompdb
 print "grabbed mongo collection"
-mongo_data = mongo_db.sampledata
+mongo_data = mongo_db.blogdata
 
 #INIT PSQL JSONB Direct Connection
 pjson_db = psycopg2.connect(
