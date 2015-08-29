@@ -256,8 +256,8 @@ class Query15Mongo(Query):
         super(Query15Mongo, self).__init__("Data Update Query 15")
 
     def prepare(self):
-        # Update 1% of the data
-        self.update_range = get_random_data_slice(DATA_SIZE, 0.01)
+        # Update 20 data entries
+        self.update_range = get_random_data_slice(DATA_SIZE, 20.0 / DATA_SIZE)
         self.arguments = [(i, random.random()) for i in xrange(*self.update_range)]
 
     def db_command(self):
