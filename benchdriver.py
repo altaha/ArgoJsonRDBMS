@@ -75,10 +75,11 @@ if __name__ == "__main__":
     q12m = MongoQueries.Query12Mongo()
     q13m = MongoQueries.Query13Mongo()
     q14m = MongoQueries.Query14Mongo()
+    q15m = MongoQueries.Query15Mongo()
     mongo_loader = MongoQueries.InitialLoadMongo()
     mongo_dropper = MongoQueries.DropCollectionMongo()
-    mongo_queries = [q1m, q2m, q3m, q4m, q5m, q6m, q7m, q8m, q9m, q10m, q11m, q12m, q13m, q14m]
-    mongo_include_indexes = range(0, 14)
+    mongo_queries = [q1m, q2m, q3m, q4m, q5m, q6m, q7m, q8m, q9m, q10m, q11m, q12m, q13m, q14m, q15m]
+    mongo_include_indexes = range(0, 15)
     mongo_skip_indexes = []
     mongo_test_suite = TestSuite(
         tag='Mongo',
@@ -103,10 +104,11 @@ if __name__ == "__main__":
     q12p = PJsonQueries.Query12PJson()
     q13p = PJsonQueries.Query13PJson()
     q14p = PJsonQueries.Query14PJson()
+    q15p = PJsonQueries.Query15PJson()
     pjson_loader = PJsonQueries.InitialLoadPJson()
     pjson_dropper = PJsonQueries.DropCollectionPJson()
-    pjson_queries = [q1p, q2p, q3p, q4p, q5p, q6p, q7p, q8p, q9p, q10p, q11p, q12p, q13p, q14p]
-    pjson_include_indexes = range(0, 14)
+    pjson_queries = [q1p, q2p, q3p, q4p, q5p, q6p, q7p, q8p, q9p, q10p, q11p, q12p, q13p, q14p, q15p]
+    pjson_include_indexes = range(0, 15)
     pjson_skip_indexes = []
     pjson_test_suite = TestSuite(
         tag='PJson',

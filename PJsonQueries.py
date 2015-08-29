@@ -263,6 +263,25 @@ class Query14PJson(Query):
         return cur
 
 
+class Query15PJson(Query):
+    def __init__(self):
+        super(Query15PJson, self).__init__("Data Update Query 15")
+
+    def prepare(self):
+        # Update 1% of the data
+        self.update_range = get_random_data_slice(DATA_SIZE, 0.01)
+        self.arguments = [(i, random.random()) for i in xrange(*self.update_range)]
+
+    def db_command(self):
+        cur = pjson_db.cursor()
+        for tup in self.arguments:
+            jsonb_query = (
+                "SELECT jsonb_set(data, '{{dyn2}}', '{0}') FROM pjson_main"
+                " WHERE data ->> 'num' = '{1}';".format(tup[1], tup[0])
+            )
+            cur.execute(jsonb_query)
+
+
 class DropCollectionPJson(Query):
     def __init__(self):
         super(DropCollectionPJson, self).__init__("Dropping Data from PJson")
