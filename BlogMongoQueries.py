@@ -4,6 +4,7 @@ import pickle
 import random
 import subprocess
 from bson import Code
+from pymongo import IndexModel, ASCENDING
 
 from bench_utils import get_random_data_slice
 from Query import Query
@@ -72,3 +73,8 @@ class InitialLoadMongo(Query):
         file_name = FILES_DIR + MONGO_FILENAME
         load_data = subprocess.Popen(["mongoimport", "--db", "blogcompdb", "--collection", "blogdata", "--file", file_name], stdout=subprocess.PIPE)
         load_data.communicate()
+
+        # create indexes on user_id and comments user_id
+        index1 = IndexModel([('user_id', ASCENDING)], name='user_id_index')
+        index2 = IndexModel([('authored.comments.user_id', ASCENDING)], name='comment_index')
+        mongo_data.create_indexes([index1, index2])

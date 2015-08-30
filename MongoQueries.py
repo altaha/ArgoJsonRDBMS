@@ -3,6 +3,7 @@ import random
 import subprocess
 import math
 from bson import Code
+from pymongo import IndexModel, ASCENDING
 
 import nobench_gendata
 from bench_utils import get_random_data_slice
@@ -277,3 +278,8 @@ class InitialLoadMongo(Query):
         file_name = FILES_DIR + MONGO_FILENAME
         load_data = subprocess.Popen(["mongoimport", "--db", "argocompdb", "--collection", "sampledata", "--file", file_name], stdout=subprocess.PIPE)
         load_data.communicate()
+
+        # create indexes on num and str1
+        index1 = IndexModel([('num', ASCENDING)], name='num_index')
+        index2 = IndexModel([('str1', ASCENDING)], name='str1_index')
+        mongo_data.create_indexes([index1, index2])
