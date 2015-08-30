@@ -63,6 +63,10 @@ MongoDB argocompdb, wiredTiger engine, 4004000 (4million + 0.1%) objects, sizes 
         "ok" : 1
 }
 
+# Note, adding indexes on num and str1 resulted in indexsize of 126.0
+    "indexes": 4,
+    "indexSize": 126.066,
+
 > db.sampledata.stats(1024*1024)
 {
         "ns" : "argocompdb.sampledata",
