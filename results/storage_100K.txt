@@ -1,0 +1,109 @@
+###############################################################################
+MongoDB argocompdb, wiredTiger engine, 1010000 (1million + 0.1%) objects, sizes in MB:
+
+> db.stats(1024*1024)
+{
+        "db" : "argocompdb",
+        "collections" : 2,
+        "objects" : 101200,
+        "avgObjSize" : 771.0444169960474,
+        "dataSize" : 74.41491603851318,
+        "storageSize" : 30.49609375,
+        "numExtents" : 0,
+        "indexes" : 4,
+        "indexSize" : 3.05078125,
+        "ok" : 1
+}
+
+###############################################################################
+PSQL pjson pjson_main, 1010000 (1million + 0.1%) objects, sizes in MB:
+
+pjson=# \dt;
+           List of relations
+ Schema |    Name    | Type  |  Owner
+--------+------------+-------+---------
+ public | pjson_main | table | vagrant
+(1 row)
+(table has 101000 rows)
+
+pjson=# select pg_size_pretty(pg_database_size('pjson'));
+ pg_size_pretty
+----------------
+ 130 MB
+(1 row)
+
+pjson=#
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main'));
+ pg_size_pretty
+----------------
+ 94 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_total_relation_size('pjson_main'));
+ pg_size_pretty
+----------------
+ 123 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main_data_idx'));
+ pg_size_pretty
+----------------
+ 29 MB
+(1 row)
+
+
+###############################################################################
+PSQL argo nobench_main, 1010000 (1million + 0.1%) objects, sizes in MB:
+
+argo=# \dt;
+                 List of relations
+ Schema |          Name          | Type  |  Owner
+--------+------------------------+-------+---------
+ public | argo_nobench_main_bool | table | vagrant
+ public | argo_nobench_main_num  | table | vagrant
+ public | argo_nobench_main_str  | table | vagrant
+(3 rows)
+
+argo=# select pg_size_pretty(pg_database_size('argo'));
+ pg_size_pretty
+----------------
+ 4705 MB
+(1 row)
+
+
+argo=#
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_bool'));
+ pg_size_pretty
+----------------
+ 138 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_bool'));
+ pg_size_pretty
+----------------
+ 63 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_num'));
+ pg_size_pretty
+----------------
+ 650 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_num'));
+ pg_size_pretty
+----------------
+ 255 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_str'));
+ pg_size_pretty
+----------------
+ 3910 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_str'));
+ pg_size_pretty
+----------------
+ 1506 MB
+(1 row)
