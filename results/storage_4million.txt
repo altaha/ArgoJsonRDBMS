@@ -1,0 +1,359 @@
+###############################################################################
+MongoDB argocompdb, MMAPv1 engine, 4004000 (4million + 0.1%) objects, sizes in MB:
+
+> db.stats(1024*1024)
+{
+    "db" : "argocompdb",
+    "collections" : 4,
+    "objects" : 4012007,
+    "avgObjSize" : 1006.2117199695813,
+    "dataSize" : 3849.914993286133,
+    "storageSize" : 5055.07421875,
+    "numExtents" : 30,
+    "indexes" : 2,
+    "indexSize" : 124.40498352050781,
+    "fileSize" : 8125,
+    "nsSizeMB" : 16,
+    "extentFreeList" : {
+        "num" : 8,
+        "totalSize" : 5
+    },
+    "dataFileVersion" : {
+        "major" : 4,
+        "minor" : 22
+    },
+    "ok" : 1
+}
+
+> db.sampledata.stats(1024*1024)
+{
+    "ns" : "argocompdb.sampledata",
+    "count" : 4004000,
+    "size" : 3849,
+    "avgObjSize" : 1008,
+    "numExtents" : 23,
+    "storageSize" : 5052,
+    "lastExtentSize" : 1315.140625,
+    "paddingFactor" : 1,
+    "paddingFactorNote" : "paddingFactor is unused and unmaintained in 3.0. It remains hard coded to 1.0 for compatibility only.",
+    "userFlags" : 1,
+    "capped" : false,
+    "nindexes" : 1,
+    "totalIndexSize" : 123,
+    "indexSizes" : {
+        "_id_" : 123
+    },
+    "ok" : 1
+}
+
+###############################################################################
+MongoDB argocompdb, wiredTiger engine, 4004000 (4million + 0.1%) objects, sizes in MB:
+
+> db.stats(1024*1024)
+{
+        "db" : "argocompdb",
+        "collections" : 2,
+        "objects" : 4048000,
+        "avgObjSize" : 806.6848228754941,
+        "dataSize" : 3114.1854887008667,
+        "storageSize" : 1198.77734375,
+        "numExtents" : 0,
+        "indexes" : 2,
+        "indexSize" : 34.98046875,
+        "ok" : 1
+}
+
+> db.sampledata.stats(1024*1024)
+{
+        "ns" : "argocompdb.sampledata",
+        "count" : 4040000,
+        "size" : 3113,
+        "avgObjSize" : 808,
+        "storageSize" : 1198,
+        "capped" : false,
+        "wiredTiger" : {
+                "metadata" : {
+                        "formatVersion" : 1
+                },
+                "creationString" : "allocation_size=4KB,app_metadata=(formatVersion=1),block_allocation=best,block_compressor=snappy,cache_resident=0,checkpoint=(WiredTigerCheckpoint.24=(addr=\"01e3048e
+5f81e481e1ffb4e3048e6081e42e411d41e3048e6181e465c5229c808080e44aea0fc0e44ad1afc0\",order=24,time=1440880186,size=1255264256,write_gen=105873)),checkpoint_lsn=(21,47034752),checksum=on,collator=,columns=
+,dictionary=0,format=btree,huffman_key=,huffman_value=,id=11,internal_item_max=0,internal_key_max=0,internal_key_truncate=,internal_page_max=4KB,key_format=q,key_gap=10,leaf_item_max=0,leaf_key_max=0,le
+af_page_max=32KB,leaf_value_max=64MB,memory_page_max=10m,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=0,prefix_compression_min=4,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,
+value_format=u,version=(major=1,minor=1)",
+                "type" : "file",
+                "uri" : "statistics:table:collection-8--8597193378687391680",
+                "LSM" : {
+                        "bloom filters in the LSM tree" : 0,
+                        "bloom filter false positives" : 0,
+                        "bloom filter hits" : 0,
+                        "bloom filter misses" : 0,
+                        "bloom filter pages evicted from cache" : 0,
+                        "bloom filter pages read into cache" : 0,
+                        "total size of bloom filters" : 0,
+                        "sleep for LSM checkpoint throttle" : 0,
+                        "chunks in the LSM tree" : 0,
+                        "highest merge generation in the LSM tree" : 0,
+                        "queries that could have benefited from a Bloom filter that did not exist" : 0,
+                        "sleep for LSM merge throttle" : 0
+                },
+                "block-manager" : {
+                        "file allocation unit size" : 4096,
+                        "blocks allocated" : 105921,
+                        "checkpoint size" : 1255264256,
+                        "allocations requiring file extension" : 104286,
+                        "blocks freed" : 3304,
+                        "file magic number" : 120897,
+                        "file major version number" : 1,
+                        "minor version number" : 0,
+                        "file bytes available for reuse" : 1679360,
+                        "file size in bytes" : 1256861696
+                },
+                "btree" : {
+                        "btree checkpoint generation" : 397,
+                        "column-store variable-size deleted values" : 0,
+                        "column-store fixed-size leaf pages" : 0,
+                        "column-store internal pages" : 0,
+                        "column-store variable-size leaf pages" : 0,
+                        "pages rewritten by compaction" : 0,
+                        "number of key/value pairs" : 0,
+                        "fixed-record size" : 0,
+                        "maximum tree depth" : 3,
+                        "maximum internal page key size" : 368,
+                        "maximum internal page size" : 4096,
+                        "maximum leaf page key size" : 3276,
+                        "maximum leaf page size" : 32768,
+                        "maximum leaf page value size" : 67108864,
+                        "overflow pages" : 0,
+                        "row-store internal pages" : 0,
+                        "row-store leaf pages" : 0
+                },
+                "cache" : {
+                        "bytes read into cache" : 3302411620,
+                        "bytes written from cache" : 3322797677,
+                        "checkpoint blocked page eviction" : 0,
+                        "unmodified pages evicted" : 0,
+                        "page split during eviction deepened the tree" : 0,
+                        "modified pages evicted" : 337,
+                        "data source pages selected for eviction unable to be evicted" : 130,
+                        "hazard pointer blocked page eviction" : 130,
+                        "internal pages evicted" : 0,
+                        "pages split during eviction" : 337,
+                        "in-memory page splits" : 260,
+                        "overflow values cached in memory" : 0,
+                        "pages read into cache" : 102130,
+                        "overflow pages read into cache" : 0,
+                        "pages written from cache" : 105874
+                },
+                "compression" : {
+                        "raw compression call failed, no additional data available" : 0,
+                        "raw compression call failed, additional data available" : 0,
+                        "raw compression call succeeded" : 0,
+                        "compressed pages read" : 102113,
+                        "compressed pages written" : 102357,
+                        "page written failed to compress" : 0,
+                        "page written was too small to compress" : 3517
+                },
+                "cursor" : {
+                        "create calls" : 31,
+                        "insert calls" : 4040200,
+                        "bulk-loaded cursor-insert calls" : 0,
+                        "cursor-insert key and value bytes inserted" : 3281204869,
+                        "next calls" : 952610150,
+                        "prev calls" : 1,
+                        "remove calls" : 0,
+                        "cursor-remove key bytes removed" : 0,
+                        "reset calls" : 11514467,
+                        "search calls" : 200,
+                        "search near calls" : 7473905,
+                        "update calls" : 0,
+                        "cursor-update value bytes updated" : 0
+                },
+                "reconciliation" : {
+                        "dictionary matches" : 0,
+                        "internal page multi-block writes" : 46,
+                        "leaf page multi-block writes" : 356,
+                        "maximum blocks required for a page" : 303,
+                        "internal-page overflow keys" : 0,
+                        "leaf-page overflow keys" : 0,
+                        "overflow values written" : 0,
+                        "pages deleted" : 0,
+                        "page checksum matches" : 8803,
+                        "page reconciliation calls" : 622,
+                        "page reconciliation calls for eviction" : 335,
+                        "leaf page key bytes discarded using prefix compression" : 0,
+                        "internal page key bytes discarded using suffix compression" : 103993
+                },
+                "session" : {
+                        "object compaction" : 0,
+                        "open cursor count" : 31
+                },
+                "transaction" : {
+                        "update conflicts" : 0
+                }
+        },
+        "nindexes" : 1,
+        "totalIndexSize" : 34,
+        "indexSizes" : {
+                "_id_" : 34
+        },
+        "ok" : 1
+}
+
+
+###############################################################################
+PSQL pjson pjson_main, 4040000 (4million + 0.1%) objects, sizes in MB:
+
+pjson=# \dt;
+           List of relations
+ Schema |    Name    | Type  |  Owner
+--------+------------+-------+---------
+ public | pjson_main | table | vagrant
+(1 row)
+(table has 4040000 rows)
+
+pjson=# select pg_size_pretty(pg_database_size('pjson'));
+ pg_size_pretty
+----------------
+ 4982 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main'));
+ pg_size_pretty
+----------------
+ 3945 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_total_relation_size('pjson_main'));
+ pg_size_pretty
+----------------
+ 4976 MB
+(1 row)
+
+pjson=# \d pjson_main;
+ Table "public.pjson_main"
+ Column | Type  | Modifiers
+--------+-------+-----------
+ data   | jsonb |
+Indexes:
+    "pjson_main_data_idx" gin (data)
+
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main_data_idx'));
+ pg_size_pretty
+----------------
+ 1030 MB
+(1 row)
+
+
+###############################################################################
+PSQL argo nobench_main, 4040000 (4million + 0.1%) objects, sizes in MB:
+
+argo=# \dt;
+                 List of relations
+ Schema |          Name          | Type  |  Owner
+--------+------------------------+-------+---------
+ public | argo_nobench_main_bool | table | vagrant
+ public | argo_nobench_main_num  | table | vagrant
+ public | argo_nobench_main_str  | table | vagrant
+(3 rows)
+
+argo=# select pg_size_pretty(pg_database_size('argo'));
+ pg_size_pretty
+----------------
+ 35 GB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_bool'));
+ pg_size_pretty
+----------------
+ 752 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_bool'));
+ pg_size_pretty
+----------------
+ 227 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_num'));
+ pg_size_pretty
+----------------
+ 4937 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_num'));
+ pg_size_pretty
+----------------
+ 1843 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_str'));
+ pg_size_pretty
+----------------
+ 29 GB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_str'));
+ pg_size_pretty
+----------------
+ 11 GB
+(1 row)
+
+# breakdowns of argo string relation
+
+argo=# \d argo_nobench_main_str;
+Table "public.argo_nobench_main_str"
+ Column |  Type  | Modifiers
+--------+--------+-----------
+ objid  | bigint | not null
+ keystr | text   | not null
+ valstr | text   | not null
+Indexes:
+    "argo_nobench_main_idx_str_key" btree (keystr)
+    "argo_nobench_main_idx_str_objid" btree (objid)
+    "argo_nobench_main_idx_str_val" btree (valstr)
+(has 76288673 rows)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_idx_str_key'));
+ pg_size_pretty
+----------------
+ 6810 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_idx_str_objid'));
+ pg_size_pretty
+----------------
+ 4615 MB
+(1 row)
+
+argo=#
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_idx_str_val'));
+ pg_size_pretty
+----------------
+ 7457 MB
+(1 row)
+
+# breakdown of argo num and bool relations
+argo=# \d argo_nobench_main_num;
+ Table "public.argo_nobench_main_num"
+ Column |       Type       | Modifiers
+--------+------------------+-----------
+ objid  | bigint           | not null
+ keystr | text             | not null
+ valnum | double precision | not null
+Indexes:
+    "argo_nobench_main_idx_num_key" btree (keystr)
+    "argo_nobench_main_idx_num_objid" btree (objid)
+    "argo_nobench_main_idx_num_val" btree (valnum)
+(has 17304663 rows)
+
+argo=# \d argo_nobench_main_bool;
+Table "public.argo_nobench_main_bool"
+ Column  |  Type   | Modifiers
+---------+---------+-----------
+ objid   | bigint  | not null
+ keystr  | text    | not null
+ valbool | boolean | not null
+Indexes:
+    "argo_nobench_main_idx_bool_key" btree (keystr)
+    "argo_nobench_main_idx_bool_objid" btree (objid)
+(has 5386664 rows)
