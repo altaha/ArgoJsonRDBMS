@@ -1,0 +1,209 @@
+###############################################################################
+MongoDB argocompdb, wiredTiger engine, 1010000 (1million + 0.1%) objects, sizes in MB:
+
+> db.stats(1024*1024)
+{
+        "db" : "argocompdb",
+        "collections" : 2,
+        "objects" : 1012000,
+        "avgObjSize" : 799.6528824110671,
+        "dataSize" : 771.7597169876099,
+        "storageSize" : 297.1953125,
+        "numExtents" : 0,
+        "indexes" : 4,
+        "indexSize" : 32.65625,
+        "ok" : 1
+}
+
+> db.sampledata.stats(1024*1024)
+{
+        "ns" : "argocompdb.sampledata",
+        "count" : 1010000,
+        "size" : 771,
+        "avgObjSize" : 801,
+        "storageSize" : 297,
+        "capped" : false,
+        "wiredTiger" : {
+                "metadata" : {
+                        "formatVersion" : 1
+                },
+                "compression" : {
+                        "raw compression call failed, no additional data available" : 0,
+                        "raw compression call failed, additional data available" : 0,
+                        "raw compression call succeeded" : 0,
+                        "compressed pages read" : 25149,
+                        "compressed pages written" : 25532,
+                        "page written failed to compress" : 0,
+                        "page written was too small to compress" : 560
+                },
+                "transaction" : {
+                        "update conflicts" : 0
+                }
+        },
+        "nindexes" : 3,
+        "totalIndexSize" : 32,
+        "indexSizes" : {
+                "_id_" : 8,
+                "num_index" : 10,
+                "str1_index" : 13
+        },
+        "ok" : 1
+}
+
+###############################################################################
+PSQL pjson pjson_main, 1010000 (1million + 0.1%) objects, sizes in MB:
+
+pjson=# \dt;
+           List of relations
+ Schema |    Name    | Type  |  Owner
+--------+------------+-------+---------
+ public | pjson_main | table | vagrant
+(1 row)
+(table has 1010000 rows)
+
+pjson=# select pg_size_pretty(pg_database_size('pjson'));
+ pg_size_pretty
+----------------
+ 1263 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main'));
+ pg_size_pretty
+----------------
+ 986 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_total_relation_size('pjson_main'));
+ pg_size_pretty
+----------------
+ 1256 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main_data_idx'));
+ pg_size_pretty
+----------------
+ 271 MB
+(1 row)
+
+pjson=# \d pjson_main;
+ Table "public.pjson_main"
+ Column | Type  | Modifiers
+--------+-------+-----------
+ data   | jsonb |
+Indexes:
+    "pjson_main_data_idx" gin (data)
+
+
+###############################################################################
+PSQL argo nobench_main, 1010000 (1million + 0.1%) objects, sizes in MB:
+
+argo=# \dt;
+                 List of relations
+ Schema |          Name          | Type  |  Owner
+--------+------------------------+-------+---------
+ public | argo_nobench_main_bool | table | vagrant
+ public | argo_nobench_main_num  | table | vagrant
+ public | argo_nobench_main_str  | table | vagrant
+(3 rows)
+
+argo=# select pg_size_pretty(pg_database_size('argo'));
+ pg_size_pretty
+----------------
+ 4247 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_bool'));
+ pg_size_pretty
+----------------
+ 122 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_bool'));
+ pg_size_pretty
+----------------
+ 57 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_num'));
+ pg_size_pretty
+----------------
+ 583 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_num'));
+ pg_size_pretty
+----------------
+ 231 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_str'));
+ pg_size_pretty
+----------------
+ 3535 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_relation_size('argo_nobench_main_str'));
+ pg_size_pretty
+----------------
+ 1372 MB
+(1 row)
+
+# breakdowns of argo string relation
+
+argo=# \d argo_nobench_main_str;
+Table "public.argo_nobench_main_str"
+ Column |  Type  | Modifiers
+--------+--------+-----------
+ objid  | bigint | not null
+ keystr | text   | not null
+ valstr | text   | not null
+Indexes:
+    "argo_nobench_main_idx_str_key" btree (keystr)
+    "argo_nobench_main_idx_str_objid" btree (objid)
+    "argo_nobench_main_idx_str_val" btree (valstr)
+(has 19072173 rows)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_idx_str_key'));
+ pg_size_pretty
+----------------
+ 847 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_idx_str_objid'));
+ pg_size_pretty
+----------------
+ 410 MB
+(1 row)
+
+argo=# select pg_size_pretty(pg_total_relation_size('argo_nobench_main_idx_str_val'));
+ pg_size_pretty
+----------------
+ 906 MB
+(1 row)
+
+
+# breakdown of argo num and bool relations
+argo=# \d argo_nobench_main_num;
+ Table "public.argo_nobench_main_num"
+ Column |       Type       | Modifiers
+--------+------------------+-----------
+ objid  | bigint           | not null
+ keystr | text             | not null
+ valnum | double precision | not null
+Indexes:
+    "argo_nobench_main_idx_num_key" btree (keystr)
+    "argo_nobench_main_idx_num_objid" btree (objid)
+    "argo_nobench_main_idx_num_val" btree (valnum)
+(has 4326163 rows)
+
+argo=# \d argo_nobench_main_bool;
+Table "public.argo_nobench_main_bool"
+ Column  |  Type   | Modifiers
+---------+---------+-----------
+ objid   | bigint  | not null
+ keystr  | text    | not null
+ valbool | boolean | not null
+Indexes:
+    "argo_nobench_main_idx_bool_key" btree (keystr)
+    "argo_nobench_main_idx_bool_objid" btree (objid)
+(has 1346664` rows)
