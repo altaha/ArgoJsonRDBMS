@@ -1,0 +1,52 @@
+###############################################################################
+MongoDB blogcompdb, wiredTiger engine, 50000 objects, sizes in MB:
+
+> db.stats(1024*1024)
+{
+        "db" : "blogcompdb",
+        "collections" : 1,
+        "objects" : 45000,
+        "avgObjSize" : 3910.8770666666665,
+        "dataSize" : 167.8366355895996,
+        "storageSize" : 89.3125,
+        "numExtents" : 0,
+        "indexes" : 3,
+        "indexSize" : 2.6796875,
+        "ok" : 1
+}
+
+###############################################################################
+PSQL pjson blog_main, 50000 objects, sizes in MB:
+
+pjson=# \dt;
+           List of relations
+ Schema |    Name    | Type  |  Owner
+--------+------------+-------+---------
+ public | pjson_blog | table | vagrant
+(1 row)
+(table has 45000 rows)
+
+pjson=# select pg_size_pretty(pg_database_size('pjson'));
+ pg_size_pretty
+----------------
+ 184 MB
+(1 row)
+
+pjson=#
+pjson=# select pg_size_pretty(pg_relation_size('pjson_blog'));
+ pg_size_pretty
+----------------
+ 43 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_total_relation_size('pjson_blog'));
+ pg_size_pretty
+----------------
+ 178 MB
+(1 row)
+
+pjson=# select pg_size_pretty(pg_relation_size('pjson_main_data_idx'));
+ pg_size_pretty
+----------------
+ 72 MB
+(1 row)
